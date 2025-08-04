@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FilesSortingSystem.Views.LogsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:FilesSortingSystem.ViewModels"
+    Title="Logs"
+    x:DataType="viewmodels:LogsViewModel"
+    Background="#030F2A">
+    <Grid
+        Padding="30"
+        HorizontalOptions="Center"
+        VerticalOptions="Center">
+
+        <Border
+            Padding="20"
+            Background="#043151"
+            HeightRequest="500"
+            HorizontalOptions="Center"
+            Stroke="#043151"
+            StrokeShape="RoundRectangle 20"
+            StrokeThickness="0"
+            VerticalOptions="Center"
+            WidthRequest="800">
+
+            <VerticalStackLayout Spacing="10">
+                <Label
+                    FontSize="35"
+                    HorizontalOptions="Center"
+                    Text="Sorting Logs"
+                    TextColor="#FFFFFF" />
+                <Label
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="View recent files sorting activity"
+                    TextColor="#FFFFFF" />
+
+                <BoxView
+                    HeightRequest="1"
+                    HorizontalOptions="Fill"
+                    Color="LightGray" />
+
+                <ScrollView HeightRequest="350">
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="Center"
+                        LineBreakMode="WordWrap"
+                        Text="{Binding LogContent}"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+                </ScrollView>
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="15">
+                    <Button
+                        BackgroundColor="#0C95F8"
+                        Command="{Binding ClearLogsCommand}"
+                        CornerRadius="10"
+                        IsVisible="{Binding HasLogs}"
+                        Text="Clear Logs"
+                        TextColor="White"
+                        WidthRequest="100" />
+
+                    <Button
+                        BackgroundColor="DarkRed"
+                        Command="{Binding CloseCommand}"
+                        CornerRadius="10"
+                        Text="Close"
+                        TextColor="White"
+                        WidthRequest="100" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>
