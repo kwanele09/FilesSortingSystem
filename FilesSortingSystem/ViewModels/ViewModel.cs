@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using FilesSortingSystem.Services.Interfaces;
+using FilesSortingSystem.Core.Interfaces;
 
 namespace FilesSortingSystem.ViewModels
 {

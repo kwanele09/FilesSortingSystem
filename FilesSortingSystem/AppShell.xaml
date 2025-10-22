@@ -9,7 +9,7 @@
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate views:SortingPage}"
+        ContentTemplate="{DataTemplate views:SortingRulesPage}"
         Route="MainPage" />
 
 </Shell>

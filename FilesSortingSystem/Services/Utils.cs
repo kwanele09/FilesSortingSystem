@@ -1,10 +1,5 @@
-﻿using FilesSortingSystem.Services.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using FilesSortingSystem.Core.Interfaces;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FilesSortingSystem.Services
 {

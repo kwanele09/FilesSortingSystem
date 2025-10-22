@@ -1,4 +1,4 @@
-﻿using FilesSortingSystem.Services.Interfaces;
+﻿using FilesSortingSystem.Core.Interfaces;
 using System.Text.Json;
 
 namespace FilesSortingSystem.Services

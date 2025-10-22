@@ -53,9 +53,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\SortingPage.xaml.cs">
-      <DependentUpon>SortingPage.xaml</DependentUpon>
-    </Compile>
+    <ProjectReference Include="..\FilesSortingSystem.Core\FilesSortingSystem.Core.csproj" />
+    <ProjectReference Include="..\FilesSortingSystem.Storage\FilesSortingSystem.Storage.csproj" />
   </ItemGroup>
   <ItemGroup>
     <MauiXaml Update="Views\LogsPage.xaml">
@@ -65,6 +64,9 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\SortingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\SortingRulesPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
   </ItemGroup>

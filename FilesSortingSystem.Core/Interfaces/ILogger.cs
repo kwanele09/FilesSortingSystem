@@ -1,4 +1,4 @@
-﻿namespace FilesSortingSystem.Services.Interfaces
+﻿namespace FilesSortingSystem.Core.Interfaces
 {
     public interface ILogger
     {

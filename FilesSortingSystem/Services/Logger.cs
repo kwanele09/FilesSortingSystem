@@ -1,15 +1,10 @@
-﻿using FilesSortingSystem.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FilesSortingSystem.Core.Interfaces;
 
 namespace FilesSortingSystem.Services
 {
     public class Logger : ILogger
     {
-        private readonly string logFile = Path.Combine(
+        private readonly string _logFile = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
         "sort_log.txt");
 
@@ -17,7 +12,7 @@ namespace FilesSortingSystem.Services
         {
             try
             {
-                File.AppendAllText(logFile, $"Moved: {from} -> {to}{Environment.NewLine}");
+                File.AppendAllText(_logFile, $"Moved: {from} -> {to}{Environment.NewLine}");
             }
             catch (Exception ex)
             {

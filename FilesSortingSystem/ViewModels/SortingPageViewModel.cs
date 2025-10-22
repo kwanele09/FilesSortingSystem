@@ -1,10 +1,6 @@
 ﻿using CommunityToolkit.Maui.Storage;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FilesSortingSystem.Models;
-using FilesSortingSystem.Services.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using FilesSortingSystem.Core.Interfaces;
 
 namespace FilesSortingSystem.ViewModels
 {
@@ -57,7 +53,7 @@ namespace FilesSortingSystem.ViewModels
                 return;
             }
 
-            _fileSorter.SetRules(FileSortRules.DefaultRules);
+            //_fileSorter.SetRules(FileSortRules.DefaultRules);
 
             try
             {

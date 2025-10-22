@@ -1,28 +1,15 @@
-﻿using FilesSortingSystem.Services.Interfaces;
+﻿using FilesSortingSystem.Core.Interfaces;
 using System.Diagnostics;
-using ILogger = FilesSortingSystem.Services.Interfaces.ILogger;
 
 namespace FilesSortingSystem.Services
 {
-    public class FileSorter : IFileSorter
+    public class FileSorter(IRulesEngine rulesEngine, ILogger logger, ISettings settings, IUtils utils) : IFileSorter
     {
-        private Dictionary<string, string> rules = [];
-        private readonly IRulesEngine _rulesEngine;
-        private readonly ILogger _logger;
-        private readonly ISettings _settings;
-        private readonly IUtils _utils;
-
-        public FileSorter(IRulesEngine rulesEngine, ILogger logger, ISettings settings, IUtils utils)
-        {
-            _rulesEngine = rulesEngine;
-            _logger = logger;
-            _settings = settings;
-            _utils = utils;
-        }
+        private Dictionary<string, string> _rules = [];
 
         public void SetRules(Dictionary<string, string> extensionToFolder)
         {
-            rules = new Dictionary<string, string>(extensionToFolder, StringComparer.OrdinalIgnoreCase);
+            _rules = new Dictionary<string, string>(extensionToFolder, StringComparer.OrdinalIgnoreCase);
         }
 
         public void Sort(string folderPath)
@@ -36,9 +23,9 @@ namespace FilesSortingSystem.Services
 
             foreach (var filePath in allFiles)
             {
-                string ext = _utils.GetFileExtension(filePath);
+                string ext = utils.GetFileExtension(filePath);
 
-                if (rules.TryGetValue(ext, out var category))
+                if (_rules.TryGetValue(ext, out var category))
                 {
                     string? basePath = GetSpecialFolderPath(category);
 
@@ -52,25 +39,25 @@ namespace FilesSortingSystem.Services
                         Debug.WriteLine($"[DEBUG] Using special folder for '{category}': {basePath}");
                     }
 
-                    string subFolderName = GetSubFolderName(ext); // ✅ FIXED: Pass extension here
+                    string subFolderName = GetSubFolderName(ext);
                     string destination = Path.Combine(basePath, subFolderName);
 
-                    _utils.EnsureDirectory(destination);
-                    _utils.MoveFile(filePath, destination);
+                    utils.EnsureDirectory(destination);
+                    utils.MoveFile(filePath, destination);
 
                     Debug.WriteLine($"[INFO] Moved file '{filePath}' to '{destination}'");
-                    _logger.logFileMoved(filePath, destination);
+                    logger.logFileMoved(filePath, destination);
                 }
                 else
                 {
                     var unknownCategory = ext.Trim('.').ToUpperInvariant();
                     var fallbackPath = Path.Combine(folderPath, unknownCategory);
 
-                    _utils.EnsureDirectory(fallbackPath);
-                    _utils.MoveFile(filePath, fallbackPath);
+                    utils.EnsureDirectory(fallbackPath);
+                    utils.MoveFile(filePath, fallbackPath);
 
                     Debug.WriteLine($"[INFO] Moved unknown file '{filePath}' to '{fallbackPath}'");
-                    _logger.logFileMoved(filePath, fallbackPath);
+                    logger.logFileMoved(filePath, fallbackPath);
                 }
             }
         }

@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Maui;
+using FilesSortingSystem.Core.Interfaces;
 using FilesSortingSystem.Services;
-using FilesSortingSystem.Services.Interfaces;
 using FilesSortingSystem.ViewModels;
 using FilesSortingSystem.Views;
 using Microsoft.Extensions.Logging;
-using ILogger = FilesSortingSystem.Services.Interfaces.ILogger;
+using ILogger = FilesSortingSystem.Core.Interfaces.ILogger;
 using Settings = FilesSortingSystem.Services.Settings;
 
 namespace FilesSortingSystem
@@ -38,9 +38,13 @@ namespace FilesSortingSystem
 
             builder.Services.AddTransient<SortingPageViewModel>();
             builder.Services.AddTransient<LogsViewModel>();
+            builder.Services.AddTransient<SortingRulesViewModel>();
+
+
             builder.Services.AddTransient<SortingPage>();
             builder.Services.AddTransient<LogsPage>();
             builder.Services.AddTransient<SettingsPage>();
+            builder.Services.AddTransient<SortingRulesPage>();
 
 
             return builder.Build();
