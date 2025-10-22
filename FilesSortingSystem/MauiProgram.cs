@@ -47,7 +47,10 @@ namespace FilesSortingSystem
             builder.Services.AddSingleton<IApplicationProvider, ApplicationProvider>();
             builder.Services.AddSingleton<ICategoryPathResolver, CategoryPathResolver>();
             builder.Services.AddSingleton<ISubCategoryResolver, DocumentSubCategoryResolver>();
-            builder.Services.AddSingleton<ISubCategoryResolver, ImageSubCategoryResolver>();
+            builder.Services.AddSingleton<ILogStorage, LogStorage>();
+            builder.Services.AddSingleton<IAddLogsEntryInteractor, AddLogsEntryInteractor>();
+            builder.Services.AddSingleton<ILogMapper, LogMapper>();
+            builder.Services.AddSingleton<IGetLogsEntryInteractor, GetLogsEntryInteractor>();
 
 
             // Interactors

@@ -1,16 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FilesSortingSystem.Core.Interfaces;
 using FilesSortingSystem.Models;
 using System.Collections.ObjectModel;
 
 namespace FilesSortingSystem.ViewModels
 {
-    public partial class LogsViewModel : ObservableObject
+    public partial class LogsViewModel(IGetLogsEntryInteractor getLogsInteractor) : ObservableObject
     {
-        private readonly string logFilePath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-            "sort_log.txt");
-
         [ObservableProperty]
         private ObservableCollection<LogEntry> logs = new();
 
@@ -24,17 +21,16 @@ namespace FilesSortingSystem.ViewModels
             {
                 Logs.Clear();
 
-                if (File.Exists(logFilePath))
+                var logEntries = await getLogsInteractor.Handle();
+
+                foreach (var log in logEntries)
                 {
-                    var lines = await File.ReadAllLinesAsync(logFilePath);
-                    foreach (var line in lines)
+                    Logs.Add(new LogEntry
                     {
-                        Logs.Add(new LogEntry
-                        {
-                            Message = line,
-                            IsMoved = true 
-                        });
-                    }
+                        Message = log.Message,
+                        IsMoved = log.IsMoved,
+                        MoveDateTime = DateTime.Now
+                    });
                 }
 
                 HasLogs = Logs.Count > 0;
@@ -52,18 +48,13 @@ namespace FilesSortingSystem.ViewModels
         {
             try
             {
-                if (File.Exists(logFilePath))
-                {
-                    File.Delete(logFilePath);
-                }
-
                 Logs.Clear();
                 HasLogs = false;
             }
             catch (Exception ex)
             {
                 Logs.Clear();
-                Logs.Add(new LogEntry { Message = $"Error deleting logs: {ex.Message}", IsMoved = false });
+                Logs.Add(new LogEntry { Message = $"Error clearing logs: {ex.Message}", IsMoved = false });
                 HasLogs = false;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using FilesSortingSystem.Core.DomainEntities;
+using FilesSortingSystem.Core.InputObjects;
 using FilesSortingSystem.Core.Interfaces;
 using FilesSortingSystem.Interfaces;
 using System.Diagnostics;
@@ -19,7 +20,6 @@ namespace FilesSortingSystem.Services
             if (!Directory.Exists(folderPath))
                 throw new DirectoryNotFoundException($"Folder not found: {folderPath}");
 
-            // ✅ Load rules from DB and JSON
             var userRules = await rulesInteractor.Handle() ?? new List<FileSortRule>();
             var defaultRules = await LoadDefaultRulesAsync();
 
@@ -35,37 +35,46 @@ namespace FilesSortingSystem.Services
                 StringComparer.OrdinalIgnoreCase
             );
 
-            // ✅ Sort files
             var allFiles = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
+
             foreach (var file in allFiles)
             {
                 try
                 {
                     string ext = utils.GetFileExtension(file);
+                    string? category = null;
+                    string? finalPath = null;
 
-                    if (extensionToCategory.TryGetValue(ext, out var category))
+                    if (extensionToCategory.TryGetValue(ext, out var cat))
                     {
+                        category = cat;
                         string basePath = categoryPathResolver.ResolvePath(category, folderPath);
 
                         string? subCategory = subCategoryResolvers
                             .Select(r => r.GetSubDirectory(category, ext))
                             .FirstOrDefault(sub => sub != null);
 
-                        string finalPath = string.IsNullOrWhiteSpace(subCategory)
+                        finalPath = string.IsNullOrWhiteSpace(subCategory)
                             ? basePath
                             : Path.Combine(basePath, subCategory);
-
-                        utils.EnsureDirectory(finalPath);
-                        utils.MoveFile(file, finalPath);
-                        logger.logFileMoved(file, finalPath, DateTime.Now);
                     }
                     else
                     {
-                        var fallback = Path.Combine(folderPath, ext.Trim('.').ToUpperInvariant());
-                        utils.EnsureDirectory(fallback);
-                        utils.MoveFile(file, fallback);
-                        logger.logFileMoved(file, fallback, DateTime.Now);
+                        category = ext.Trim('.').ToUpperInvariant();
+                        finalPath = Path.Combine(folderPath, category);
                     }
+
+                    utils.EnsureDirectory(finalPath);
+                    utils.MoveFile(file, finalPath);
+
+                    var logInput = new LogEntryInput
+                    {
+                        IsMoved = true,
+                        Message = $"Moved: {file} -> {finalPath}",
+                        MoveDateTime = DateTime.Now
+                    };
+
+                    logger.logFileMoved(new List<LogEntryInput> { logInput });
                 }
                 catch (Exception ex)
                 {
@@ -103,5 +112,4 @@ namespace FilesSortingSystem.Services
             }
         }
     }
-
 }

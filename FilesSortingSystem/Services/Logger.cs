@@ -1,18 +1,15 @@
-﻿using FilesSortingSystem.Core.Interfaces;
+﻿using FilesSortingSystem.Core.InputObjects;
+using FilesSortingSystem.Core.Interfaces;
 
 namespace FilesSortingSystem.Services
 {
-    public class Logger : ILogger
+    public class Logger(IAddLogsEntryInteractor addLogsEntryInteractor) : ILogger
     {
-        private readonly string _logFile = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-            "sort_log.txt");
-
-        public void logFileMoved(string from, string to, DateTime moveDateTime)
+        public void logFileMoved(List<LogEntryInput> logEntryInput)
         {
             try
             {
-                File.AppendAllText(_logFile, $"[{moveDateTime:yyyy-MM-dd HH:mm:ss}] Moved: {from} -> {to}{Environment.NewLine}");
+                Task.Run(async () => await addLogsEntryInteractor.Handle(logEntryInput));
             }
             catch (Exception ex)
             {

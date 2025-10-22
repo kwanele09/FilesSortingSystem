@@ -18,7 +18,7 @@ namespace FilesSortingSystem.Core.Interactors
             return storedLogs;
         }
 
-        private List<LogEntry> CreateLogEntries(List<LogEntryInput> inputs)
+        private static List<LogEntry> CreateLogEntries(List<LogEntryInput> inputs)
         {
             var logs = new List<LogEntry>();
 
