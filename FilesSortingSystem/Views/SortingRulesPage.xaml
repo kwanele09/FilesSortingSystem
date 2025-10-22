@@ -119,7 +119,6 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-
                 </Border>
 
                 <VerticalStackLayout HorizontalOptions="Start" Spacing="15">

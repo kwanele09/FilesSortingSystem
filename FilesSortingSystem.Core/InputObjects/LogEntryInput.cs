@@ -1,6 +1,6 @@
-﻿namespace FilesSortingSystem.Models
+﻿namespace FilesSortingSystem.Core.InputObjects
 {
-    public class LogEntry
+    public class LogEntryInput
     {
         public bool IsMoved { get; set; }
         public string Message { get; set; } = string.Empty;

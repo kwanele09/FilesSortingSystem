@@ -2,6 +2,7 @@
 {
     public interface ILogger
     {
-        void logFileMoved(string from, string to);
+        public void logFileMoved(string from, string to, DateTime moveDateTime);
+
     }
 }

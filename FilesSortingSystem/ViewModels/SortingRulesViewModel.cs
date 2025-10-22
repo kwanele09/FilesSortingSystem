@@ -55,7 +55,6 @@ namespace FilesSortingSystem.ViewModels
 
                 var userRules = await getRulesInteractor.Handle() ?? new List<FileSortRule>();
 
-                // Merge, remove duplicates
                 var combinedRules = defaultRules
                     .Concat(userRules)
                     .GroupBy(r => (r.Extension.ToLowerInvariant(), r.Category.ToLowerInvariant()))
