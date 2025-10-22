@@ -1,0 +1,213 @@
+[
+    {
+        "Extension": ".pdf",
+        "Category": "Documents",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".doc",
+        "Category": "Documents",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".docx",
+        "Category": "Documents",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".txt",
+        "Category": "Documents",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".xls",
+        "Category": "Documents",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".xlsx",
+        "Category": "Documents",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".ppt",
+        "Category": "Documents",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".pptx",
+        "Category": "Documents",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".epub",
+        "Category": "Documents",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".mobi",
+        "Category": "Documents",
+        "IsCaseSensitive": true
+    },
+
+    {
+        "Extension": ".jpg",
+        "Category": "Images",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".jpeg",
+        "Category": "Images",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".png",
+        "Category": "Images",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".gif",
+        "Category": "Images",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".bmp",
+        "Category": "Images",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".svg",
+        "Category": "Images",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".tiff",
+        "Category": "Images",
+        "IsCaseSensitive": true
+    },
+
+    {
+        "Extension": ".mp3",
+        "Category": "Audio",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".wav",
+        "Category": "Audio",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".aac",
+        "Category": "Audio",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".flac",
+        "Category": "Audio",
+        "IsCaseSensitive": true
+    },
+
+    {
+        "Extension": ".mp4",
+        "Category": "Videos",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".mov",
+        "Category": "Videos",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".wmv",
+        "Category": "Videos",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".avi",
+        "Category": "Videos",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".mkv",
+        "Category": "Videos",
+        "IsCaseSensitive": true
+    },
+
+    {
+        "Extension": ".zip",
+        "Category": "Archives",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".rar",
+        "Category": "Archives",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".7z",
+        "Category": "Archives",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".tar",
+        "Category": "Archives",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".gz",
+        "Category": "Archives",
+        "IsCaseSensitive": true
+    },
+
+    {
+        "Extension": ".exe",
+        "Category": "Programs",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".msi",
+        "Category": "Programs",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".bat",
+        "Category": "Programs",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".cmd",
+        "Category": "Programs",
+        "IsCaseSensitive": true
+    },
+
+    {
+        "Extension": ".cs",
+        "Category": "Code",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".js",
+        "Category": "Code",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".html",
+        "Category": "Code",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".css",
+        "Category": "Code",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".json",
+        "Category": "Code",
+        "IsCaseSensitive": true
+    },
+    {
+        "Extension": ".xml",
+        "Category": "Code",
+        "IsCaseSensitive": true
+    }
+]

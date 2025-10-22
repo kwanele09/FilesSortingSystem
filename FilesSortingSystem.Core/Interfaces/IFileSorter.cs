@@ -2,7 +2,6 @@
 {
     public interface IFileSorter
     {
-        void SetRules(Dictionary<string, string> extensionToFolder);
-        void Sort(string folderPath);
+        Task SortAsync(string folderPath);
     }
 }

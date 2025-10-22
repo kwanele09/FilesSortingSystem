@@ -28,6 +28,14 @@
                 </MenuFlyoutItem.KeyboardAccelerators>
             </MenuFlyoutItem>
         </MenuBarItem>
+
+        <MenuBarItem Text="Rules">
+            <MenuFlyoutItem Command="{Binding OpenRulesCommand}" Text="View Rules">
+                <MenuFlyoutItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="L" Modifiers="Ctrl" />
+                </MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>
+        </MenuBarItem>
     </ContentPage.MenuBarItems>
 
     <ScrollView>

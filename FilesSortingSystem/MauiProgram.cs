@@ -1,6 +1,14 @@
 ﻿using CommunityToolkit.Maui;
+using FilesSortingSystem.Core.Guards;
+using FilesSortingSystem.Core.Interactors;
 using FilesSortingSystem.Core.Interfaces;
+using FilesSortingSystem.Interfaces;
+using FilesSortingSystem.Providers;
 using FilesSortingSystem.Services;
+using FilesSortingSystem.Storage.Interfaces;
+using FilesSortingSystem.Storage.Mappers;
+using FilesSortingSystem.Storage.Provider;
+using FilesSortingSystem.Storage.Storage;
 using FilesSortingSystem.ViewModels;
 using FilesSortingSystem.Views;
 using Microsoft.Extensions.Logging;
@@ -35,10 +43,25 @@ namespace FilesSortingSystem
             builder.Services.AddSingleton<IUtils, Utils>();
             builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<INavigate, Navigator>();
+            builder.Services.AddSingleton<DatabaseConnectionProvider>();
+            builder.Services.AddSingleton<IApplicationProvider, ApplicationProvider>();
+            builder.Services.AddSingleton<ICategoryPathResolver, CategoryPathResolver>();
+            builder.Services.AddSingleton<ISubCategoryResolver, DocumentSubCategoryResolver>();
+            builder.Services.AddSingleton<ISubCategoryResolver, ImageSubCategoryResolver>();
+
+
+            // Interactors
+            builder.Services.AddSingleton<IAddRuleInteractor, AddRuleInteractor>();
+            builder.Services.AddSingleton<IGetRulesInteractor, GetRulesInteractor>();
+            builder.Services.AddSingleton<IFileSortRuleStorage, FileSortRuleStorage>();
+            builder.Services.AddSingleton<IFileSortRuleMapper, FileSortRuleMapper>();
+            builder.Services.AddSingleton<IGuardExtensions, GuardExtensions>();
+
 
             builder.Services.AddTransient<SortingPageViewModel>();
             builder.Services.AddTransient<LogsViewModel>();
             builder.Services.AddTransient<SortingRulesViewModel>();
+            builder.Services.AddTransient<SetRuleViewModel>();
 
 
             builder.Services.AddTransient<SortingPage>();

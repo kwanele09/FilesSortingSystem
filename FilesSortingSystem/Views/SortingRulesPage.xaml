@@ -2,6 +2,7 @@
     x:Class="FilesSortingSystem.Views.SortingRulesPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:domainEntities="clr-namespace:FilesSortingSystem.Core.DomainEntities;assembly=FilesSortingSystem.Core"
     xmlns:vm="clr-namespace:FilesSortingSystem.ViewModels"
     Title=""
     x:DataType="vm:SortingRulesViewModel"
@@ -46,7 +47,7 @@
                     HorizontalOptions="Fill"
                     Color="Gray" />
 
-                <HorizontalStackLayout Spacing="700">
+                <HorizontalStackLayout Spacing="260">
                     <Label
                         FontSize="25"
                         HorizontalOptions="Center"
@@ -55,6 +56,11 @@
                         FontSize="25"
                         HorizontalOptions="End"
                         Text="Destination Folder" />
+
+                    <Label
+                        FontSize="25"
+                        HorizontalOptions="Center"
+                        Text="Case Sensitive" />
                 </HorizontalStackLayout>
 
                 <Border
@@ -62,21 +68,61 @@
                     BackgroundColor="#043151"
                     HorizontalOptions="Fill"
                     Stroke="White"
-                    StrokeThickness="1">
+                    StrokeThickness="1"
+                    VerticalOptions="Start">
 
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10" />
                     </Border.StrokeShape>
 
-                    <HorizontalStackLayout
-                        Padding="10,0"
-                        HorizontalOptions="Fill"
-                        Spacing="10"
-                        VerticalOptions="Center" />
+                    <CollectionView
+                        Margin="0,10,0,0"
+                        ItemsSource="{Binding Rules}"
+                        SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="domainEntities:FileSortRule">
+                                <VerticalStackLayout>
+                                    <Grid Padding="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="3*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label
+                                            Grid.Column="0"
+                                            FontSize="25"
+                                            Text="{Binding Extension}"
+                                            TextColor="White"
+                                            VerticalOptions="Center" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            FontSize="25"
+                                            Text="{Binding Category}"
+                                            TextColor="White"
+                                            VerticalOptions="Center" />
+
+                                        <CheckBox
+                                            Grid.Column="2"
+                                            IsChecked="{Binding IsCaseSensitive}"
+                                            Scale="1.5"
+                                            VerticalOptions="Center"
+                                            Color="Purple" />
+                                    </Grid>
+
+                                    <BoxView
+                                        HeightRequest="1"
+                                        HorizontalOptions="Fill"
+                                        Color="Gray" />
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
                 </Border>
 
                 <VerticalStackLayout HorizontalOptions="Start" Spacing="15">
-
                     <Border
                         Padding="0"
                         BackgroundColor="#043151"
@@ -96,6 +142,7 @@
 
                         <Button
                             BackgroundColor="Transparent"
+                            Command="{Binding AddRuleCommand}"
                             FontSize="25"
                             HeightRequest="50"
                             Text="+ Add Rule"
@@ -113,10 +160,11 @@
 
                     <Button
                         Background="#0C95F8"
+                        Command="{Binding DoneCommand}"
                         FontSize="25"
                         HeightRequest="50"
                         HorizontalOptions="Center"
-                        Text="Save"
+                        Text="Done"
                         TextColor="White"
                         WidthRequest="150" />
                 </VerticalStackLayout>

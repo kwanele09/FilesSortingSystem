@@ -1,96 +1,106 @@
-﻿using FilesSortingSystem.Core.Interfaces;
+﻿using FilesSortingSystem.Core.DomainEntities;
+using FilesSortingSystem.Core.Interfaces;
+using FilesSortingSystem.Interfaces;
 using System.Diagnostics;
+using System.Reflection;
+using System.Text.Json;
 
-namespace FilesSortingSystem.Services
+public class FileSorter(
+    IGetRulesInteractor rulesInteractor,
+    ILogger logger,
+    IUtils utils,
+    IEnumerable<ISubCategoryResolver> subCategoryResolvers,
+    ICategoryPathResolver categoryPathResolver) : IFileSorter
 {
-    public class FileSorter(IRulesEngine rulesEngine, ILogger logger, ISettings settings, IUtils utils) : IFileSorter
+    public async Task SortAsync(string folderPath)
     {
-        private Dictionary<string, string> _rules = [];
+        if (!Directory.Exists(folderPath))
+            throw new DirectoryNotFoundException($"Folder not found: {folderPath}");
 
-        public void SetRules(Dictionary<string, string> extensionToFolder)
+        // ✅ Load rules from DB and JSON
+        var userRules = await rulesInteractor.Handle() ?? new List<FileSortRule>();
+        var defaultRules = await LoadDefaultRulesAsync();
+
+        var allRules = defaultRules
+            .Concat(userRules)
+            .GroupBy(r => (r.Extension.ToLowerInvariant(), r.Category.ToLowerInvariant()))
+            .Select(g => g.First())
+            .ToList();
+
+        var extensionToCategory = allRules.ToDictionary(
+            r => r.Extension,
+            r => r.Category,
+            StringComparer.OrdinalIgnoreCase
+        );
+
+        // ✅ Sort files
+        var allFiles = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
+        foreach (var file in allFiles)
         {
-            _rules = new Dictionary<string, string>(extensionToFolder, StringComparer.OrdinalIgnoreCase);
-        }
-
-        public void Sort(string folderPath)
-        {
-            if (!Directory.Exists(folderPath))
-                throw new DirectoryNotFoundException($"Folder not found: {folderPath}");
-
-            var allFiles = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
-
-            Debug.WriteLine($"[DEBUG] Total files found: {allFiles.Length}");
-
-            foreach (var filePath in allFiles)
+            try
             {
-                string ext = utils.GetFileExtension(filePath);
+                string ext = utils.GetFileExtension(file);
 
-                if (_rules.TryGetValue(ext, out var category))
+                if (extensionToCategory.TryGetValue(ext, out var category))
                 {
-                    string? basePath = GetSpecialFolderPath(category);
+                    // ✅ Resolve base path using CategoryPathResolver
+                    string basePath = categoryPathResolver.ResolvePath(category, folderPath);
 
-                    if (string.IsNullOrEmpty(basePath))
-                    {
-                        basePath = Path.Combine(folderPath, category);
-                        Debug.WriteLine($"[DEBUG] Using fallback path for category '{category}': {basePath}");
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"[DEBUG] Using special folder for '{category}': {basePath}");
-                    }
+                    // ✅ Optional subcategory (PDF, PNG, etc.)
+                    string? subCategory = subCategoryResolvers
+                        .Select(r => r.GetSubDirectory(category, ext))
+                        .FirstOrDefault(sub => sub != null);
 
-                    string subFolderName = GetSubFolderName(ext);
-                    string destination = Path.Combine(basePath, subFolderName);
+                    string finalPath = string.IsNullOrWhiteSpace(subCategory)
+                        ? basePath
+                        : Path.Combine(basePath, subCategory);
 
-                    utils.EnsureDirectory(destination);
-                    utils.MoveFile(filePath, destination);
-
-                    Debug.WriteLine($"[INFO] Moved file '{filePath}' to '{destination}'");
-                    logger.logFileMoved(filePath, destination);
+                    utils.EnsureDirectory(finalPath);
+                    utils.MoveFile(file, finalPath);
+                    logger.logFileMoved(file, finalPath);
                 }
                 else
                 {
-                    var unknownCategory = ext.Trim('.').ToUpperInvariant();
-                    var fallbackPath = Path.Combine(folderPath, unknownCategory);
-
-                    utils.EnsureDirectory(fallbackPath);
-                    utils.MoveFile(filePath, fallbackPath);
-
-                    Debug.WriteLine($"[INFO] Moved unknown file '{filePath}' to '{fallbackPath}'");
-                    logger.logFileMoved(filePath, fallbackPath);
+                    // ✅ Fallback: create folder by extension
+                    var fallback = Path.Combine(folderPath, ext.Trim('.').ToUpperInvariant());
+                    utils.EnsureDirectory(fallback);
+                    utils.MoveFile(file, fallback);
+                    logger.logFileMoved(file, fallback);
                 }
             }
-        }
-
-        private string GetSubFolderName(string extension)
-        {
-            return extension.ToLowerInvariant() switch
+            catch (Exception ex)
             {
-                ".pdf" => "PDFs",
-                ".doc" or ".docx" => "Docs",
-                ".txt" => "TextFiles",
-                ".xls" or ".xlsx" => "Spreadsheets",
-                ".ppt" or ".pptx" => "Presentations",
-                ".epub" or ".mobi" => "Ebooks",
-
-                ".jpg" or ".jpeg" or ".png" or ".bmp" or ".gif" or ".svg" or ".tiff" => "Images",
-                ".mp3" or ".wav" or ".aac" or ".flac" => "AudioFiles",
-                ".mp4" or ".mov" or ".wmv" or ".avi" or ".mkv" => "Videos",
-
-                _ => extension.Trim('.').ToUpperInvariant() + " Files"
-            };
+                Debug.WriteLine($"[FileSorter] Failed to sort file {file}: {ex}");
+            }
         }
+    }
 
-        private string? GetSpecialFolderPath(string category)
+    private async Task<List<FileSortRule>> LoadDefaultRulesAsync()
+    {
+        try
         {
-            return category.ToLowerInvariant() switch
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "FilesSortingSystem.Configurations.DefaultFileSortRules.json";
+
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream == null)
             {
-                "documents" => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "images" or "pictures" => Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
-                "audio" or "music" => Environment.GetFolderPath(Environment.SpecialFolder.MyMusic),
-                "videos" => Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
-                _ => null
-            };
+                Debug.WriteLine($"[FileSorter] Embedded resource not found: {resourceName}");
+                return new List<FileSortRule>();
+            }
+
+            using var reader = new StreamReader(stream);
+            var json = await reader.ReadToEndAsync();
+
+            var rules = JsonSerializer.Deserialize<List<FileSortRule>>(json,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            return rules ?? new List<FileSortRule>();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[FileSorter] Failed to load default rules: {ex}");
+            return new List<FileSortRule>();
         }
     }
 }

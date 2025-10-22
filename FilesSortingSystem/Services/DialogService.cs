@@ -1,15 +1,19 @@
 ﻿using FilesSortingSystem.Core.Interfaces;
+using FilesSortingSystem.Interfaces;
 
 namespace FilesSortingSystem.Services
 {
-    public class DialogService : IDialogService
+    public class DialogService(IApplicationProvider applicationProvider) : IDialogService
     {
         public Task DisplayAlertAsync(string title, string message, string cancel)
         {
-            if (Application.Current?.MainPage != null)
+            var currentPage = applicationProvider.CurrentApplication?.Windows?[0].Page;
+
+            if (currentPage != null)
             {
-                return Application.Current.MainPage.DisplayAlert(title, message, cancel);
+                return currentPage.DisplayAlert(title, message, cancel);
             }
+
             return Task.CompletedTask;
         }
     }

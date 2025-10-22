@@ -20,10 +20,10 @@ namespace FilesSortingSystem.Storage.Provider
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
                     "FileSortingSystem.db"
                     );
-#if DEBUG
-                if(File.Exists(databasePath))
-                    File.Delete(databasePath);
-#endif
+//#if DEBUG
+//                if(File.Exists(databasePath))
+//                    File.Delete(databasePath);
+//#endif
                 _connection = new SQLiteAsyncConnection(databasePath);
 
                 return _connection;

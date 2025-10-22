@@ -98,5 +98,17 @@ namespace FilesSortingSystem.Storage.Storage
             }
         }
 
+        public bool Exists( string extension, string category )
+        {
+            var connTask = dbProvider.GetConnectionAsync();
+            connTask.Wait();
+            var conn = connTask.Result;
+            conn.CreateTableAsync<FileSortRuleEntity>().Wait();
+            var ruleEntity = conn.Table<FileSortRuleEntity>()
+                                 .Where(r => r.Extension == extension || r.Category == category)
+                                 .FirstOrDefaultAsync();
+            ruleEntity.Wait();
+            return ruleEntity.Result != null;
+        }
     }
 }

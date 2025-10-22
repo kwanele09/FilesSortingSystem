@@ -8,5 +8,6 @@ namespace FilesSortingSystem.Core.Interfaces
         Task<FileSortRule> AddRuleAsync(FileSortRule rule);
         Task<FileSortRule> UpdateRuleAsync(FileSortRule rule);
         Task DeleteRuleAsync(int ruleId);
+        bool Exists(string extension, string category);
     }
 }

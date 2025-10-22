@@ -1,34 +1,49 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FilesSortingSystem.Models;
+using System.Collections.ObjectModel;
 
 namespace FilesSortingSystem.ViewModels
 {
     public partial class LogsViewModel : ObservableObject
     {
         private readonly string logFilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-        "sort_log.txt");
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "sort_log.txt");
 
-        [ObservableProperty] private string logContent = string.Empty;
-        public bool HasLogs => !string.IsNullOrWhiteSpace(LogContent) && LogContent != "No logs found.";
+        [ObservableProperty]
+        private ObservableCollection<LogEntry> logs = new();
+
+        [ObservableProperty]
+        private bool hasLogs;
 
         [RelayCommand]
         public async Task LoadLogsAsync()
         {
             try
             {
+                Logs.Clear();
+
                 if (File.Exists(logFilePath))
                 {
-                    LogContent = await File.ReadAllTextAsync(logFilePath);
+                    var lines = await File.ReadAllLinesAsync(logFilePath);
+                    foreach (var line in lines)
+                    {
+                        Logs.Add(new LogEntry
+                        {
+                            Message = line,
+                            IsMoved = true 
+                        });
+                    }
                 }
-                else
-                {
-                    LogContent = "No logs found.";
-                }
+
+                HasLogs = Logs.Count > 0;
             }
             catch (Exception ex)
             {
-                LogContent = $"Error loading logs: {ex.Message}";
+                Logs.Clear();
+                Logs.Add(new LogEntry { Message = $"Error loading logs: {ex.Message}", IsMoved = false });
+                HasLogs = false;
             }
         }
 
@@ -41,11 +56,15 @@ namespace FilesSortingSystem.ViewModels
                 {
                     File.Delete(logFilePath);
                 }
-                LogContent = string.Empty;
+
+                Logs.Clear();
+                HasLogs = false;
             }
             catch (Exception ex)
             {
-                LogContent = $"Error deleting logs: {ex.Message}";
+                Logs.Clear();
+                Logs.Add(new LogEntry { Message = $"Error deleting logs: {ex.Message}", IsMoved = false });
+                HasLogs = false;
             }
         }
 
@@ -54,6 +73,5 @@ namespace FilesSortingSystem.ViewModels
         {
             await Shell.Current.Navigation.PopModalAsync();
         }
-
     }
 }

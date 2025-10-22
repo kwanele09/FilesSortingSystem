@@ -9,6 +9,8 @@ namespace FilesSortingSystem
             InitializeComponent();
             Routing.RegisterRoute("settings", typeof(SettingsPage));
             Routing.RegisterRoute("logs", typeof(LogsPage));
+            Routing.RegisterRoute("addRule", typeof(SetRulePage));
+            Routing.RegisterRoute("rules", typeof(SortingRulesPage));
 
         }
     }

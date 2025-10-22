@@ -5,11 +5,12 @@ using FilesSortingSystem.Core.Interfaces;
 
 namespace FilesSortingSystem.Core.Interactors
 {
-    public class AddRuleInteractor(IFileSortRuleStorage fileSortRuleStorage)
+    public class AddRuleInteractor(IFileSortRuleStorage fileSortRuleStorage, IGuardExtensions guardExtensions) : IAddRuleInteractor
     {
         public async Task<FileSortRule> Handle(FileSortRuleInput rule)
         {
             Guard.Against.Null(rule);
+            await guardExtensions.GuardRuleExists(rule);
             var fileSortRule = CreateFileSortRule(rule);
             var storedRule = fileSortRuleStorage.AddRuleAsync(fileSortRule);
             return await storedRule;

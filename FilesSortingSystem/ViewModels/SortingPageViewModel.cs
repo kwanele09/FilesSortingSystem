@@ -1,25 +1,18 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.Input;
+using FilesSortingSystem.Core.DomainEntities;
 using FilesSortingSystem.Core.Interfaces;
+using FilesSortingSystem.Services;
 
 namespace FilesSortingSystem.ViewModels
 {
-    public partial class SortingPageViewModel : ViewModel
+    public partial class SortingPageViewModel(IFileSorter fileSorter, IDialogService dialogService, INavigate navigation, IGetRulesInteractor getRulesInteractor) : ViewModel(navigation)
     {
-        private readonly IFileSorter _fileSorter;
-        private readonly IDialogService _dialogService;
-
         private string _selectedFolderPath = string.Empty;
         public string SelectedFolderPath
         {
             get => _selectedFolderPath;
             set => SetProperty(ref _selectedFolderPath, value);
-        }
-
-        public SortingPageViewModel(IFileSorter fileSorter, IDialogService dialogService, INavigate navigation) : base(navigation)
-        {
-            _fileSorter = fileSorter;
-            _dialogService = dialogService;
         }
 
         [RelayCommand]
@@ -32,6 +25,12 @@ namespace FilesSortingSystem.ViewModels
         private async Task ViewLogsAsync()
         {
             await Navigation.NavigateTo("logs");
+        }
+
+        [RelayCommand]
+        private async Task OpenRulesAsync()
+        {
+            await Navigation.NavigateTo("rules");
         }
 
         [RelayCommand]
@@ -49,21 +48,24 @@ namespace FilesSortingSystem.ViewModels
         {
             if (string.IsNullOrEmpty(SelectedFolderPath))
             {
-                await _dialogService.DisplayAlertAsync("Error", "Please select a folder to sort.", "OK");
+                await dialogService.DisplayAlertAsync("Error", "Please select a folder", "OK");
                 return;
             }
 
-            //_fileSorter.SetRules(FileSortRules.DefaultRules);
-
             try
             {
-                _fileSorter.Sort(SelectedFolderPath);
-                await _dialogService.DisplayAlertAsync("Success", "Sorting complete!", "OK");
+                await fileSorter.SortAsync(SelectedFolderPath);
+                await dialogService.DisplayAlertAsync("Success", "Sorting completed", "OK");
             }
             catch (Exception ex)
             {
-                await _dialogService.DisplayAlertAsync("Error", ex.Message, "OK");
+                await dialogService.DisplayAlertAsync("Error", ex.Message, "OK");
             }
+        }
+
+        public async Task<List<FileSortRule>> GetSortingRulesAsync()
+        {
+            return await getRulesInteractor.Handle();
         }
     }
 }

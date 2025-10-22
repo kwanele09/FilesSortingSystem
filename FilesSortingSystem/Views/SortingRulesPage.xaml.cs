@@ -4,32 +4,37 @@ namespace FilesSortingSystem.Views;
 
 public partial class SortingRulesPage : ContentPage
 {
-	public SortingRulesPage(SortingRulesViewModel vm)
-	{
-		InitializeComponent();
-		BindingContext = vm;
+    private readonly SortingRulesViewModel _viewModel;
 
-        this.Loaded += (s, e) =>
-        {
-            MainBorder.WidthRequest = this.Width * 0.8;
-            MainBorder.HeightRequest = this.Height * 0.9;
-        };
+    public SortingRulesPage(SortingRulesViewModel vm)
+    {
+        InitializeComponent();
+        BindingContext = _viewModel = vm;
 
-        this.SizeChanged += (s, e) =>
+        Loaded += async (s, e) =>
         {
-            MainBorder.WidthRequest = this.Width * 0.8;
-            MainBorder.HeightRequest = this.Height * 0.9;
-        };
-        this.Loaded += (s, e) =>
-        {
-            RulesBorder.WidthRequest = this.Width * 0.77;
-            RulesBorder.HeightRequest = this.Height * 0.3;
+            MainBorder.WidthRequest = Width * 0.8;
+            MainBorder.HeightRequest = Height * 0.9;
+
+            RulesBorder.WidthRequest = Width * 0.77;
+            RulesBorder.HeightRequest = Height * 0.3;
+
+
+            await _viewModel.LoadAllRulesAsync();
         };
 
-        this.SizeChanged += (s, e) =>
+        SizeChanged += (s, e) =>
         {
-            RulesBorder.WidthRequest = this.Width * 0.77;
-            RulesBorder.HeightRequest = this.Height * 0.4;
+            MainBorder.WidthRequest = Width * 0.8;
+            MainBorder.HeightRequest = Height * 0.9;
+
+            RulesBorder.WidthRequest = Width * 0.77;
+            RulesBorder.HeightRequest = Height * 0.4;
         };
+    }
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _viewModel.LoadAllRulesAsync();
     }
 }

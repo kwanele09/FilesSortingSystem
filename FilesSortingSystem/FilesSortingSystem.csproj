@@ -47,6 +47,12 @@
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Configurations\DefaultFileSortRules.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configurations\DefaultFileSortRules.json" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Microsoft.Maui.Controls" />
@@ -58,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <MauiXaml Update="Views\LogsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\SetRulePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\SettingsPage.xaml">
