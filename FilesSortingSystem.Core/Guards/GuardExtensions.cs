@@ -8,7 +8,7 @@ namespace FilesSortingSystem.Core.Guards
         {
             if (fileSortRuleStorage.Exists(fileSortRuleInput.Extension, fileSortRuleInput.Extension))
             {
-                dialogService.DisplayAlertAsync("Error", "Rule already exists. You can not create duplicated rules",
+                await dialogService.DisplayAlertAsync("Error", "Rule already exists. You can not create duplicated rules",
                     "OK");
             }
         }
