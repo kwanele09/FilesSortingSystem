@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace FilesSortingSystem.ViewModels
 {
-    public partial class LogsViewModel(IGetLogsEntryInteractor getLogsInteractor) : ObservableObject
+    public partial class LogsViewModel(IGetLogsEntryInteractor getLogsInteractor, IClearLogsInteractor clearLogsInteractor) : ObservableObject
     {
         [ObservableProperty]
         private ObservableCollection<LogEntry> logs = new();
@@ -48,6 +48,7 @@ namespace FilesSortingSystem.ViewModels
         {
             try
             {
+                await clearLogsInteractor.Handle();
                 Logs.Clear();
                 HasLogs = false;
             }

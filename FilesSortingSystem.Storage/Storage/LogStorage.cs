@@ -31,5 +31,11 @@ namespace FilesSortingSystem.Storage.Storage
             var logEntryEntities = await conn.Table<LogEntryEntity>().ToListAsync();
             return logEntryEntities.Select(logMapper.MapToDomainEntity).ToList();
         }
+
+        public async Task DeleteAllLogEntriesAsync()
+        {
+            var conn = await dbProvider.GetConnectionAsync();
+            await conn.DeleteAllAsync<LogEntryEntity>();
+        }
     }
 }

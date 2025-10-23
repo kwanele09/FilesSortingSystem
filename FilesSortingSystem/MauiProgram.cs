@@ -51,6 +51,7 @@ namespace FilesSortingSystem
             builder.Services.AddSingleton<IAddLogsEntryInteractor, AddLogsEntryInteractor>();
             builder.Services.AddSingleton<ILogMapper, LogMapper>();
             builder.Services.AddSingleton<IGetLogsEntryInteractor, GetLogsEntryInteractor>();
+            builder.Services.AddSingleton<IClearLogsInteractor, ClearLogsInteractor>();
 
 
             // Interactors
