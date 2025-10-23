@@ -16,7 +16,7 @@ namespace FilesSortingSystem.Storage.Mappers
                     Id = entity.Id,
                     Extension = entity.Extension,
                     Category = entity.Category,
-                    IsCaseSensitive = entity.IsCaseSensitive
+                    IsCaseSensitive = entity.IsCaseSensitive,
                 };
         }
 
