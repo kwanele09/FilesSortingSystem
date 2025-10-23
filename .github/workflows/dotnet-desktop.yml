@@ -1,0 +1,45 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-windows:
+    name: Build Windows EXE
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore .NET MAUI Workloads
+        run: dotnet workload restore --project FilesSortingSystem/FilesSortingSystem.csproj
+
+      - name: Restore NuGet Packages
+        run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
+
+      - name: Build Windows Executable
+        run: |
+          dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
+            -c Release `
+            -f net9.0-windows10.0.19041.0 `
+            -o "$env:GITHUB_WORKSPACE\artifacts\windows" `
+            -p:SelfContained=true `
+            -p:PublishSingleFile=true `
+            -p:PublishTrimmed=true
+
+      - name: Upload Windows EXE Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-exe
+          path: artifacts/windows
