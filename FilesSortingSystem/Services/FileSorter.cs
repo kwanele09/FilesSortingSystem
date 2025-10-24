@@ -174,6 +174,5 @@ namespace FilesSortingSystem.Services
                 Debug.WriteLine($"[FileSorter] Failed to delete empty directories: {ex}");
             }
         }
-
     }
 }
