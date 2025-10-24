@@ -11,7 +11,7 @@ namespace FilesSortingSystem
             Routing.RegisterRoute("logs", typeof(LogsPage));
             Routing.RegisterRoute("addRule", typeof(SetRulePage));
             Routing.RegisterRoute("rules", typeof(SortingRulesPage));
-
+            Routing.RegisterRoute("help", typeof(HelpPage));
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IFileSorter
     {
-        Task SortAsync(string folderPath);
+        Task SortAsync(string folderPath, bool excludeSubfolders);
     }
 }
