@@ -149,14 +149,6 @@
                             WidthRequest="1090" />
                     </Border>
 
-                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                        <CheckBox IsChecked="{Binding }" Color="White" />
-                        <Label
-                            FontSize="25"
-                            Text="Exclude subfolders"
-                            VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-
                     <Button
                         Background="#0C95F8"
                         Command="{Binding DoneCommand}"
