@@ -35,7 +35,7 @@
         </MenuBarItem>
 
         <MenuBarItem Text="Help">
-            <MenuFlyoutItem Text="How to Use the App" />
+            <MenuFlyoutItem Command="{Binding GotoHelpCommand}" Text="How to Use the App" />
         </MenuBarItem>
 
         <MenuBarItem Text="Feedback">
@@ -118,6 +118,7 @@
                 HeightRequest="180"
                 HorizontalOptions="Center"
                 Source="logo.png" />
+
 
             <Button
                 BackgroundColor="#0C95F8"

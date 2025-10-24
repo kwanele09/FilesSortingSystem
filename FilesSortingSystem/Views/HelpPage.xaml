@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FilesSortingSystem.Views.HelpPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:FilesSortingSystem.Views"
+    Title=""
+    BackgroundColor="#030F2A">
+
+    <Grid
+        Padding="30"
+        HorizontalOptions="Center"
+        VerticalOptions="Center">
+
+        <Border
+            Padding="20"
+            Background="#043151"
+            HeightRequest="500"
+            HorizontalOptions="Center"
+            Stroke="#043151"
+            StrokeShape="RoundRectangle 20"
+            StrokeThickness="0"
+            VerticalOptions="Center"
+            WidthRequest="800">
+
+            <ScrollView>
+                <VerticalStackLayout Margin="15,15,15,15" Spacing="15">
+
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="35"
+                        HorizontalOptions="Center"
+                        Text="How To Use This App"
+                        TextColor="White" />
+
+                    <BoxView HeightRequest="1" Color="LightGray" />
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        Text="Purpose of the App"
+                        TextColor="#6126CE" />
+                    <Label
+                        FontSize="18"
+                        LineBreakMode="WordWrap"
+                        Text="This app is designed to help you quickly sort files in your folders. By default, it performs a deep search, meaning it will look through all subfolders and organize the content accordingly."
+                        TextColor="White" />
+
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        Text="Usage Advice"
+                        TextColor="#6126CE" />
+                    <Label
+                        FontSize="18"
+                        LineBreakMode="WordWrap"
+                        Text="⚠️ Do not use this app on coding or development project folders. Sorting these could alter important files and break your project."
+                        TextColor="White" />
+
+
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        Text="Recommended Folders"
+                        TextColor="#6126CE" />
+                    <Label
+                        FontSize="18"
+                        LineBreakMode="WordWrap"
+                        Text="✅ Best used for folders like Downloads, Desktop, or any folder containing media files such as music, videos, or images. The app will sort them into appropriate subfolders automatically."
+                        TextColor="White" />
+
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        Text="Tips"
+                        TextColor="#6126CE" />
+                    <Label
+                        FontSize="18"
+                        LineBreakMode="WordWrap"
+                        Text="• Always double-check which folder you are sorting before running the process.                            • Consider creating a backup of important folders if you are unsure.                                                    • You can choose to exclude subfolders if you only want to sort files in the selected folder."
+                        TextColor="White" />
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+    </Grid>
+</ContentPage>
