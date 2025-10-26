@@ -1,8 +1,6 @@
 ﻿using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.Input;
-using FilesSortingSystem.Core.DomainEntities;
 using FilesSortingSystem.Core.Interfaces;
-using FilesSortingSystem.Services;
 
 namespace FilesSortingSystem.ViewModels
 {
@@ -13,6 +11,13 @@ namespace FilesSortingSystem.ViewModels
         {
             get => _selectedFolderPath;
             set => SetProperty(ref _selectedFolderPath, value);
+        }
+
+        private bool _excludeSubfolders = false;
+        public bool ExcludeSubfolders
+        {
+            get => _excludeSubfolders;
+            set => SetProperty(ref _excludeSubfolders, value);
         }
 
         [RelayCommand]
@@ -31,6 +36,11 @@ namespace FilesSortingSystem.ViewModels
         private async Task OpenRulesAsync()
         {
             await Navigation.NavigateTo("rules");
+        }
+        [RelayCommand]
+        private async Task GotoHelpAsync()
+        {
+            await Navigation.NavigateTo("help");
         }
 
         [RelayCommand]
@@ -54,18 +64,13 @@ namespace FilesSortingSystem.ViewModels
 
             try
             {
-                await fileSorter.SortAsync(SelectedFolderPath);
+                await fileSorter.SortAsync(SelectedFolderPath, ExcludeSubfolders);
                 await dialogService.DisplayAlertAsync("Success", "Sorting completed", "OK");
             }
             catch (Exception ex)
             {
                 await dialogService.DisplayAlertAsync("Error", ex.Message, "OK");
             }
-        }
-
-        public async Task<List<FileSortRule>> GetSortingRulesAsync()
-        {
-            return await getRulesInteractor.Handle();
         }
     }
 }
