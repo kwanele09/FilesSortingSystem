@@ -42,6 +42,11 @@ namespace FilesSortingSystem.ViewModels
         {
             await Navigation.NavigateTo("help");
         }
+        [RelayCommand]
+        private async Task GotoAboutAsync()
+        {
+            await Navigation.NavigateTo("about");
+        }
 
         [RelayCommand]
         private async Task PickFolderAsync()

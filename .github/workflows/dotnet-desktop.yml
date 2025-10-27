@@ -1,4 +1,4 @@
-name: Build Windows EXE
+name: Build MAUI Windows App
 
 on:
   push:
@@ -20,15 +20,18 @@ jobs:
       - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '9.0.x'   # stable .NET 9
+          include-prerelease: false
 
       - name: Restore Workloads
         run: dotnet workload restore --project FilesSortingSystem/FilesSortingSystem.csproj
 
-      - name: Restore NuGet Packages
+      # 4. Restore project dependencies
+      - name: Restore dependencies
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      - name: Build Windows Executable
+      # 5. Publish the Windows EXE
+      - name: Publish Windows App
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
