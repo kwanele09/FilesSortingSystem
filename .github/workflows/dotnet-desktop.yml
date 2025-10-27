@@ -14,40 +14,42 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # Checkout repository
+      # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Install .NET 9 SDK (stable)
+      # 2. Setup .NET SDK (stable .NET 9)
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
+          include-prerelease: false
 
-      # Install MAUI workloads
+      # 3. Install MAUI workloads
       - name: Install MAUI workloads
         run: dotnet workload install maui
 
-      # Restore NuGet packages
+      # 4. Restore NuGet packages
       - name: Restore dependencies
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      # Publish self-contained Windows EXE
+      # 5. Publish self-contained Windows EXE
       - name: Publish Windows App
+        shell: pwsh
         run: |
-          dotnet publish FilesSortingSystem/FilesSortingSystem.csproj ^
-            -c Release ^
-            -f net9.0-windows10.0.19041.0 ^
-            -r win-x64 ^
-            --self-contained true ^
-            -p:PublishSingleFile=true ^
-            -p:PublishTrimmed=false ^
-            -p:IncludeAllContentForSelfExtract=true ^
-            -p:EnableWindowsTargeting=true ^
-            -p:DebugType=None ^
-            -o "%GITHUB_WORKSPACE%\artifacts\windows"
+          dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
+            -c Release `
+            -f net9.0-windows10.0.19041.0 `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:PublishTrimmed=false `
+            -p:IncludeAllContentForSelfExtract=true `
+            -p:EnableWindowsTargeting=true `
+            -p:DebugType=None `
+            -o "$env:GITHUB_WORKSPACE\artifacts\windows"
 
-      # Upload artifacts
+      # 6. Upload artifacts
       - name: Upload Windows EXE
         uses: actions/upload-artifact@v4
         with:
