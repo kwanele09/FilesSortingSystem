@@ -35,15 +35,27 @@
         </MenuBarItem>
 
         <MenuBarItem Text="Help">
-            <MenuFlyoutItem Command="{Binding GotoHelpCommand}" Text="How to Use the App" />
+            <MenuFlyoutItem Command="{Binding GotoHelpCommand}" Text="How to Use the App">
+                <MenuFlyoutItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="R" Modifiers="Ctrl" />
+                </MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>
         </MenuBarItem>
 
         <MenuBarItem Text="Feedback">
-            <MenuFlyoutItem Text="Send Feedback" />
+            <MenuFlyoutItem Text="Send Feedback">
+                <MenuFlyoutItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="R" Modifiers="Ctrl" />
+                </MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>
         </MenuBarItem>
 
         <MenuBarItem Text="About">
-            <MenuFlyoutItem Text="About the Developer" />
+            <MenuFlyoutItem Command="{Binding GotoAboutCommand}" Text="About the Developer">
+                <MenuFlyoutItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="R" Modifiers="Ctrl" />
+                </MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>
         </MenuBarItem>
     </ContentPage.MenuBarItems>
 

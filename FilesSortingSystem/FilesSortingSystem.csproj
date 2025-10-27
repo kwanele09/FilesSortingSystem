@@ -31,6 +31,7 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
@@ -50,7 +51,9 @@
     <None Remove="Configurations\DefaultFileSortRules.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configurations\DefaultFileSortRules.json" />
+    <EmbeddedResource Include="Configurations\DefaultFileSortRules.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" />
@@ -63,6 +66,9 @@
     <ProjectReference Include="..\FilesSortingSystem.Storage\FilesSortingSystem.Storage.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <MauiXaml Update="Views\AboutMe.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\HelpPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
