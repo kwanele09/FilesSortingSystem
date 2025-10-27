@@ -28,15 +28,21 @@ jobs:
       - name: Restore NuGet Packages
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      - name: Build Windows Executable
+      - name: Publish MAUI Windows EXE (Release, Self-contained)
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
             -f net9.0-windows10.0.19041.0 `
-            -p:SelfContained=true `
+            -r win-x64 `
+            --self-contained true `
             -p:PublishSingleFile=true `
             -p:PublishTrimmed=false `
-            -o artifacts/windows
+            -p:IncludeAllContentForSelfExtract=true `
+            -p:EnableWindowsTargeting=true `
+            -p:DebugType=None `
+            -p:ErrorReport=None `
+            -o "$env:GITHUB_WORKSPACE\artifacts\windows"
+
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
