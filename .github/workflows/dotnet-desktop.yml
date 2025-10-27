@@ -10,37 +10,38 @@ on:
 
 jobs:
   build-windows:
-    name: Build Windows EXE
     runs-on: windows-latest
+    name: Build Portable Windows EXE
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
 
-      - name: Restore .NET MAUI Workloads
+      - name: Restore .NET MAUI workloads
         run: dotnet workload restore --project FilesSortingSystem/FilesSortingSystem.csproj
 
-      - name: Restore NuGet Packages
+      - name: Restore NuGet packages
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      - name: Build Windows Executable
+      - name: Publish Self-contained EXE
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
             -f net9.0-windows10.0.19041.0 `
-            -o "$env:GITHUB_WORKSPACE\artifacts\windows" `
+            -r win-x64 `
             -p:SelfContained=true `
             -p:PublishSingleFile=true `
-            -p:PublishTrimmed=true
+            -p:PublishTrimmed=false `
+            -p:EnableWindowsTargeting=true `
+            -o "$env:GITHUB_WORKSPACE\artifacts\windows"
 
-      - name: Upload Windows EXE Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-exe
           path: artifacts/windows
-
