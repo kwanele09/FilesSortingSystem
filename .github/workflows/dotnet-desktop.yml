@@ -12,41 +12,39 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # 1️⃣ Checkout the repository
+      # 1. Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Install stable .NET 9 SDK
+      # 2. Install latest stable .NET 9 SDK
       - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.306' # stable SDK
+          dotnet-version: '9.0.306'   # ✅ stable version, not preview
 
-      # 3️⃣ Install .NET MAUI workloads
-      - name: Install MAUI workload
-        run: dotnet workload install maui --source https://api.nuget.org/v3/index.json
+      # 3. Install MAUI workloads
+      - name: Install .NET MAUI Workload
+        run: |
+          dotnet workload install maui
 
-      # 4️⃣ Restore dependencies
+      # 4. Restore dependencies
       - name: Restore dependencies
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      # 5️⃣ Publish Windows EXE (self-contained, single-file)
+      # 5. Publish Windows EXE (self-contained, single file)
       - name: Publish MAUI Windows EXE
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
             -f net9.0-windows10.0.19041.0 `
             -r win-x64 `
-            --self-contained true `
+            -p:SelfContained=true `
             -p:PublishSingleFile=true `
             -p:PublishTrimmed=false `
             -p:IncludeAllContentForSelfExtract=true `
-            -p:EnableWindowsTargeting=true `
-            -p:DebugType=None `
-            -p:ErrorReport=None `
             -o "$env:GITHUB_WORKSPACE\artifacts\windows"
 
-      # 6️⃣ Upload the built EXE artifact
+      # 6. Upload build artifact
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
