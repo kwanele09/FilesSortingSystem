@@ -18,7 +18,7 @@ jobs:
       - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.100-rc.2'  # ✅ stable RC, not preview
+          dotnet-version: '9.0.100-rc.2'
 
       - name: Install MAUI Workload
         run: |
@@ -27,6 +27,15 @@ jobs:
 
       - name: Restore NuGet Packages
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
+
+      - name: Set Auto Version
+        id: version
+        run: |
+          $date = Get-Date -Format "yyyy.MM.dd"
+          $build = $env:GITHUB_RUN_NUMBER
+          $version = "$date.$build"
+          Write-Host "##[set-output name=version;]$version"
+        shell: pwsh
 
       - name: Publish MAUI Windows EXE (Release, Self-contained)
         run: |
@@ -41,10 +50,18 @@ jobs:
             -p:EnableWindowsTargeting=true `
             -p:DebugType=None `
             -p:ErrorReport=None `
+            -p:ApplicationVersion=${{ steps.version.outputs.version }} `
             -o "$env:GITHUB_WORKSPACE\artifacts\windows"
 
-      - name: Upload Windows EXE Artifact
+      - name: Zip Windows EXE Artifact
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $zipName = "FilesSortingSystem_v$version_win64.zip"
+          Compress-Archive -Path "$env:GITHUB_WORKSPACE\artifacts\windows\*" -DestinationPath "$env:GITHUB_WORKSPACE\artifacts\$zipName"
+        shell: pwsh
+
+      - name: Upload Zipped Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-exe
-          path: artifacts/windows
+          name: FilesSortingSystem-Windows
+          path: artifacts/*.zip
