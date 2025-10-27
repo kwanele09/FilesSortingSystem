@@ -15,16 +15,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ✅ Install latest stable .NET 9 SDK (not preview)
+      # ✅ Install .NET 9 RC SDK (matches currently available workloads)
       - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.306'
+          dotnet-version: '9.0.100-rc.2.25502.107'
 
-      # ✅ Ensure MAUI workloads are installed
+      # ✅ Add the preview workload feed
+      - name: Add MAUI Preview Feed
+        run: |
+          dotnet nuget add source https://aka.ms/dotnet9/nuget/index.json -n maui-preview
+
+      # ✅ Install the MAUI workload (from preview feed)
       - name: Install .NET MAUI Workload
         run: |
-          dotnet workload install maui --source https://api.nuget.org/v3/index.json
+          dotnet workload install maui --source https://aka.ms/dotnet9/nuget/index.json --ignore-failed-sources
 
       # ✅ Restore dependencies
       - name: Restore dependencies
@@ -43,7 +48,7 @@ jobs:
             -p:EnableWindowsTargeting=true `
             -o "$env:GITHUB_WORKSPACE\artifacts\windows"
 
-      # ✅ Upload the EXE so you can download it
+      # ✅ Upload artifact
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
