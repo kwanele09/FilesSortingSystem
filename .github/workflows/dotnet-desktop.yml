@@ -1,4 +1,4 @@
-name: Build Windows EXE (.NET 9 Preview)
+name: Build FilesSortingSystem (.NET 9 MAUI)
 
 on:
   push:
@@ -8,26 +8,30 @@ on:
 
 jobs:
   build-windows:
-    name: Build Windows EXE
+    name: Build MAUI Windows App
     runs-on: windows-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET 9 Preview SDK
+      # ✅ Install latest stable .NET 9 SDK (not preview)
+      - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.0-preview.7.24405.7'
-          include-prerelease: true
+          dotnet-version: '9.0.306'
 
-      - name: Restore .NET MAUI Workloads
-        run: dotnet workload restore --project FilesSortingSystem/FilesSortingSystem.csproj
+      # ✅ Ensure MAUI workloads are installed
+      - name: Install .NET MAUI Workload
+        run: |
+          dotnet workload install maui --source https://api.nuget.org/v3/index.json
 
-      - name: Restore NuGet Packages
+      # ✅ Restore dependencies
+      - name: Restore dependencies
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      - name: Publish Windows Executable
+      # ✅ Publish Windows EXE (self-contained)
+      - name: Publish MAUI Windows EXE
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
@@ -39,8 +43,9 @@ jobs:
             -p:EnableWindowsTargeting=true `
             -o "$env:GITHUB_WORKSPACE\artifacts\windows"
 
-      - name: Upload Windows EXE Artifact
+      # ✅ Upload the EXE so you can download it
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-exe
+          name: FilesSortingSystem-Windows
           path: artifacts/windows
