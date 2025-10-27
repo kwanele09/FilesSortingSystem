@@ -1,56 +1,45 @@
-name: Build FilesSortingSystem (.NET 9 MAUI)
+name: Build Windows EXE
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
 
 jobs:
   build-windows:
-    name: Build MAUI Windows App
+    name: Build Windows Executable
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # ✅ Install .NET 9 RC SDK (matches currently available workloads)
       - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.100-rc.2.25502.107'
+          dotnet-version: '9.0.x'
 
-      # ✅ Add the preview workload feed
-      - name: Add MAUI Preview Feed
-        run: |
-          dotnet nuget add source https://aka.ms/dotnet9/nuget/index.json -n maui-preview
+      - name: Restore Workloads
+        run: dotnet workload restore --project FilesSortingSystem/FilesSortingSystem.csproj
 
-      # ✅ Install the MAUI workload (from preview feed)
-      - name: Install .NET MAUI Workload
-        run: |
-          dotnet workload install maui --source https://aka.ms/dotnet9/nuget/index.json --ignore-failed-sources
-
-      # ✅ Restore dependencies
-      - name: Restore dependencies
+      - name: Restore NuGet Packages
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      # ✅ Publish Windows EXE (self-contained)
-      - name: Publish MAUI Windows EXE
+      - name: Build Windows Executable
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
             -f net9.0-windows10.0.19041.0 `
-            -r win-x64 `
             -p:SelfContained=true `
             -p:PublishSingleFile=true `
             -p:PublishTrimmed=false `
-            -p:EnableWindowsTargeting=true `
-            -o "$env:GITHUB_WORKSPACE\artifacts\windows"
+            -o artifacts/windows
 
-      # ✅ Upload artifact
-      - name: Upload build artifact
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: FilesSortingSystem-Windows
+          name: FilesSortingSystem-windows-exe
           path: artifacts/windows
