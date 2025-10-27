@@ -18,7 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Install .NET 10 RC SDK
+      # Install .NET 9 SDK (stable)
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
@@ -35,21 +35,21 @@ jobs:
       # Publish self-contained Windows EXE
       - name: Publish Windows App
         run: |
-          dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
-            -c Release `
-            -f net10.0-windows10.0.19041.0 `
-            -r win-x64 `
-            --self-contained true `
-            -p:PublishSingleFile=true `
-            -p:PublishTrimmed=false `
-            -p:IncludeAllContentForSelfExtract=true `
-            -p:EnableWindowsTargeting=true `
-            -p:DebugType=None `
-            -o "$env:GITHUB_WORKSPACE\artifacts\windows"
+          dotnet publish FilesSortingSystem/FilesSortingSystem.csproj ^
+            -c Release ^
+            -f net9.0-windows10.0.19041.0 ^
+            -r win-x64 ^
+            --self-contained true ^
+            -p:PublishSingleFile=true ^
+            -p:PublishTrimmed=false ^
+            -p:IncludeAllContentForSelfExtract=true ^
+            -p:EnableWindowsTargeting=true ^
+            -p:DebugType=None ^
+            -o "%GITHUB_WORKSPACE%\artifacts\windows"
+
       # Upload artifacts
       - name: Upload Windows EXE
         uses: actions/upload-artifact@v4
         with:
           name: FilesSortingSystem-Windows
           path: artifacts/windows
-Update upload-artifact action to version 4 · kwanele09/FilesSortingSystem@6b737d9 
