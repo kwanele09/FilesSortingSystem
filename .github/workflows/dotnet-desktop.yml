@@ -1,4 +1,4 @@
-name: Build Windows EXE
+name: Build MAUI Windows App
 
 on:
   push:
@@ -10,37 +10,41 @@ on:
 
 jobs:
   build-windows:
-    name: Build Windows EXE
     runs-on: windows-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      # 1. Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3
+      # 2. Setup .NET (stable .NET 9)
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '9.0.x'   # stable .NET 9
+          include-prerelease: false
 
-      - name: Restore .NET MAUI Workloads
-        run: dotnet workload restore --project FilesSortingSystem/FilesSortingSystem.csproj
+      # 3. Install MAUI workload
+      - name: Install .NET MAUI workloads
+        run: dotnet workload install maui
 
-      - name: Restore NuGet Packages
+      # 4. Restore project dependencies
+      - name: Restore dependencies
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      - name: Build Windows Executable
+      # 5. Publish the Windows EXE
+      - name: Publish Windows App
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
-            -f net9.0-windows10.0.19041.0 `
-            -o "$env:GITHUB_WORKSPACE\artifacts\windows" `
-            -p:SelfContained=true `
-            -p:PublishSingleFile=true `
-            -p:PublishTrimmed=true
+            -f net9.0-windows10.0.22621.0 `
+            -r win-x64 `
+            --self-contained true `
+            -o ./publish/windows
 
-      - name: Upload Windows EXE Artifact
+      # 6. Upload the built EXE as an artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-exe
-          path: artifacts/windows
-
+          name: FilesSortingSystem-Windows
+          path: ./publish/windows
