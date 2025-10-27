@@ -1,34 +1,33 @@
-name: Build Windows EXE
+name: Build Windows EXE (.NET 9 Preview)
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
 
 jobs:
   build-windows:
+    name: Build Windows EXE
     runs-on: windows-latest
-    name: Build Portable Windows EXE
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
+      - name: Setup .NET 9 Preview SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '9.0.0-preview.7.24405.7'
+          include-prerelease: true
 
-      - name: Restore .NET MAUI workloads
+      - name: Restore .NET MAUI Workloads
         run: dotnet workload restore --project FilesSortingSystem/FilesSortingSystem.csproj
 
-      - name: Restore NuGet packages
+      - name: Restore NuGet Packages
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      - name: Publish Self-contained EXE
+      - name: Publish Windows Executable
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
@@ -40,7 +39,7 @@ jobs:
             -p:EnableWindowsTargeting=true `
             -o "$env:GITHUB_WORKSPACE\artifacts\windows"
 
-      - name: Upload Artifact
+      - name: Upload Windows EXE Artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-exe
