@@ -1,4 +1,4 @@
-name: Build MAUI Windows App
+name: Build Windows EXE
 
 on:
   push:
@@ -10,48 +10,35 @@ on:
 
 jobs:
   build-windows:
-    name: Build Windows MAUI App
+    name: Build Windows Executable
     runs-on: windows-latest
 
     steps:
-      # 1. Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      # 2. Setup .NET SDK (stable .NET 9)
-      - name: Setup .NET SDK
+      - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
-          include-prerelease: false
 
-      # 3. Install MAUI workloads
-      - name: Install MAUI workloads
-        run: dotnet workload install maui
+      - name: Restore Workloads
+        run: dotnet workload restore --project FilesSortingSystem/FilesSortingSystem.csproj
 
-      # 4. Restore NuGet packages
-      - name: Restore dependencies
+      - name: Restore NuGet Packages
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      # 5. Publish self-contained Windows EXE
-      - name: Publish Windows App
-        shell: pwsh
+      - name: Build Windows Executable
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
             -f net9.0-windows10.0.19041.0 `
-            -r win-x64 `
-            --self-contained true `
+            -p:SelfContained=true `
             -p:PublishSingleFile=true `
             -p:PublishTrimmed=false `
-            -p:IncludeAllContentForSelfExtract=true `
-            -p:EnableWindowsTargeting=true `
-            -p:DebugType=None `
-            -o "$env:GITHUB_WORKSPACE\artifacts\windows"
-
-      # 6. Upload artifacts
-      - name: Upload Windows EXE
+            -o artifacts/windows
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: FilesSortingSystem-Windows
+          name: FilesSortingSystem-windows-exe
           path: artifacts/windows
