@@ -1,4 +1,4 @@
-name: Build Windows EXE
+name: Build FilesSortingSystem (.NET 9 MAUI)
 
 on:
   push:
@@ -8,36 +8,30 @@ on:
 
 jobs:
   build-windows:
-    name: Build Windows EXE
+    name: Build MAUI Windows App
     runs-on: windows-latest
 
     steps:
-      - name: Checkout Repository
+      # 1️⃣ Checkout the repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Install stable .NET 9 SDK
       - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.100-rc.2'
+          dotnet-version: '9.0.306' # stable SDK
 
-      - name: Install MAUI Workload
-        run: |
-          dotnet workload install maui
-          dotnet workload install maui-windows
+      # 3️⃣ Install .NET MAUI workloads
+      - name: Install MAUI workload
+        run: dotnet workload install maui --source https://api.nuget.org/v3/index.json
 
-      - name: Restore NuGet Packages
+      # 4️⃣ Restore dependencies
+      - name: Restore dependencies
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      - name: Set Auto Version
-        id: version
-        run: |
-          $date = Get-Date -Format "yyyy.MM.dd"
-          $build = $env:GITHUB_RUN_NUMBER
-          $version = "$date.$build"
-          Write-Host "##[set-output name=version;]$version"
-        shell: pwsh
-
-      - name: Publish MAUI Windows EXE (Release, Self-contained)
+      # 5️⃣ Publish Windows EXE (self-contained, single-file)
+      - name: Publish MAUI Windows EXE
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
@@ -50,18 +44,11 @@ jobs:
             -p:EnableWindowsTargeting=true `
             -p:DebugType=None `
             -p:ErrorReport=None `
-            -p:ApplicationVersion=${{ steps.version.outputs.version }} `
             -o "$env:GITHUB_WORKSPACE\artifacts\windows"
 
-      - name: Zip Windows EXE Artifact
-        run: |
-          $version = "${{ steps.version.outputs.version }}"
-          $zipName = "FilesSortingSystem_v$version_win64.zip"
-          Compress-Archive -Path "$env:GITHUB_WORKSPACE\artifacts\windows\*" -DestinationPath "$env:GITHUB_WORKSPACE\artifacts\$zipName"
-        shell: pwsh
-
-      - name: Upload Zipped Artifact
+      # 6️⃣ Upload the built EXE artifact
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: FilesSortingSystem-Windows
-          path: artifacts/*.zip
+          path: artifacts/windows
