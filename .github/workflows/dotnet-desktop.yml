@@ -1,3 +1,27 @@
+Skip to content
+Navigation Menu
+kwanele09
+FilesSortingSystem
+
+Type / to search
+Code
+Issues
+1
+Pull requests
+1
+Actions
+Projects
+1
+Wiki
+Security
+Insights
+Settings
+Build MAUI Windows App
+Update upload-artifact action to version 4 #20
+Jobs
+Run details
+Workflow file for this run
+.github/workflows/dotnet-desktop.yml at 6b737d9
 name: Build MAUI Windows App
 
 on:
@@ -10,41 +34,46 @@ on:
 
 jobs:
   build-windows:
+    name: Build Windows MAUI App
     runs-on: windows-latest
 
     steps:
-      # 1. Checkout the repository
+      # Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      # 2. Setup .NET (stable .NET 9)
-      - name: Setup .NET
+      # Install .NET 10 RC SDK
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'   # stable .NET 9
-          include-prerelease: false
+          dotnet-version: '9.0.x'
 
-      # 3. Install MAUI workload
-      - name: Install .NET MAUI workloads
+      # Install MAUI workloads
+      - name: Install MAUI workloads
         run: dotnet workload install maui
 
-      # 4. Restore project dependencies
+      # Restore NuGet packages
       - name: Restore dependencies
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      # 5. Publish the Windows EXE
+      # Publish self-contained Windows EXE
       - name: Publish Windows App
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
-            -f net9.0-windows10.0.22621.0 `
+            -f net10.0-windows10.0.19041.0 `
             -r win-x64 `
             --self-contained true `
-            -o ./publish/windows
-
-      # 6. Upload the built EXE as an artifact
-      - name: Upload artifact
+            -p:PublishSingleFile=true `
+            -p:PublishTrimmed=false `
+            -p:IncludeAllContentForSelfExtract=true `
+            -p:EnableWindowsTargeting=true `
+            -p:DebugType=None `
+            -o "$env:GITHUB_WORKSPACE\artifacts\windows"
+      # Upload artifacts
+      - name: Upload Windows EXE
         uses: actions/upload-artifact@v4
         with:
           name: FilesSortingSystem-Windows
-          path: ./publish/windows
+          path: artifacts/windows
+Update upload-artifact action to version 4 · kwanele09/FilesSortingSystem@6b737d9 
