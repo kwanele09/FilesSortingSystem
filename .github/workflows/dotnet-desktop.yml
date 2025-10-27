@@ -1,54 +1,55 @@
-name: Build FilesSortingSystem (.NET 9 MAUI)
+name: Build MAUI Windows App
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
 
 jobs:
   build-windows:
-    name: Build MAUI Windows App
+    name: Build Windows MAUI App
     runs-on: windows-latest
 
     steps:
-      # 1️⃣ Checkout the repository
+      # Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      # 2️⃣ Setup .NET 9 stable SDK
-      - name: Setup .NET 9 SDK
+      # Install .NET 10 RC SDK
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.306'   # ✅ stable SDK
+          dotnet-version: '10.0.100-rc.2'
 
-      # 3️⃣ Install .NET MAUI workloads
-      - name: Install .NET MAUI Workload
-        run: |
-          dotnet workload install maui --source https://api.nuget.org/v3/index.json
+      # Install MAUI workloads
+      - name: Install MAUI workloads
+        run: dotnet workload install maui
 
-      # 4️⃣ Restore dependencies
+      # Restore NuGet packages
       - name: Restore dependencies
         run: dotnet restore FilesSortingSystem/FilesSortingSystem.csproj
 
-      # 5️⃣ Publish Windows EXE (self-contained, Release)
-      - name: Publish MAUI Windows EXE
+      # Publish self-contained Windows EXE
+      - name: Publish Windows App
         run: |
           dotnet publish FilesSortingSystem/FilesSortingSystem.csproj `
             -c Release `
-            -f net9.0-windows10.0.19041.0 `
+            -f net10.0-windows10.0.19041.0 `
             -r win-x64 `
-            -p:SelfContained=true `
+            --self-contained true `
             -p:PublishSingleFile=true `
             -p:PublishTrimmed=false `
             -p:IncludeAllContentForSelfExtract=true `
+            -p:EnableWindowsTargeting=true `
             -p:DebugType=None `
-            -p:ErrorReport=None `
             -o "$env:GITHUB_WORKSPACE\artifacts\windows"
 
-      # 6️⃣ Upload the EXE for download
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+      # Upload artifacts
+      - name: Upload Windows EXE
+        uses: actions/upload-artifact@v3
         with:
           name: FilesSortingSystem-Windows
           path: artifacts/windows
