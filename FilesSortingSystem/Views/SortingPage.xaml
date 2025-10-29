@@ -49,14 +49,6 @@
                 </MenuFlyoutItem.KeyboardAccelerators>
             </MenuFlyoutItem>
         </MenuBarItem>
-
-        <MenuBarItem Text="About">
-            <MenuFlyoutItem Command="{Binding GotoAboutCommand}" Text="About the Developer">
-                <MenuFlyoutItem.KeyboardAccelerators>
-                    <KeyboardAccelerator Key="R" Modifiers="Ctrl" />
-                </MenuFlyoutItem.KeyboardAccelerators>
-            </MenuFlyoutItem>
-        </MenuBarItem>
     </ContentPage.MenuBarItems>
 
     <ScrollView>
@@ -84,7 +76,7 @@
                     Padding="15,8"
                     BackgroundColor="#030F2A"
                     HeightRequest="45"
-                    HorizontalOptions="FillAndExpand"
+                    HorizontalOptions="Fill"
                     Stroke="White"
                     StrokeShape="RoundRectangle 20"
                     StrokeThickness="2">

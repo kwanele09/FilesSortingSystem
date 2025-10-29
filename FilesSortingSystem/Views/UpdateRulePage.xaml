@@ -1,40 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="FilesSortingSystem.Views.SetRulePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:FilesSortingSystem.ViewModels"
-    Title=""
-    x:DataType="vm:SetRuleViewModel"
-    Background="#030F2A">
+    x:Class="FilesSortingSystem.Views.UpdateRulePage"
+    Title="Update Rule"
+    BackgroundColor="#030F2A">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
             <!-- Page Title -->
             <Label
+                Text="Update File Sort Rule"
+                FontSize="35"
                 FontAttributes="Bold"
-                FontSize="40"
                 HorizontalOptions="Center"
-                Text="Add Sorting Rule" />
-            <Label
-                FontSize="25"
-                HorizontalOptions="Center"
-                Text="Create a new sorting rule." />
-
-            <BoxView
-                HeightRequest="1"
-                HorizontalOptions="Fill"
-                Color="Gray" />
+                TextColor="White" />
 
             <!-- Form Container -->
             <Border
-                x:Name="MainBorder"
                 BackgroundColor="#043151"
                 Stroke="White"
                 StrokeThickness="1"
                 Padding="20">
 
+                <!-- Define rounded corners via StrokeShape -->
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="15" />
                 </Border.StrokeShape>
@@ -88,8 +78,8 @@
             <!-- Buttons -->
             <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
                 <Button
-                    Text="Add Rule"
-                    Command="{Binding AddRuleCommand}"
+                    Text="Save Rule"
+                    Command="{Binding UpdateRuleCommand}"
                     BackgroundColor="#0C95F8"
                     TextColor="White"
                     FontSize="20"

@@ -27,6 +27,10 @@ namespace FilesSortingSystem
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
+                    fonts.AddFont("Font Awesome 7 Free-Solid-900.otf", "FASolid");
+                    fonts.AddFont("Font Awesome 7 Free-Regular-400.otf", "FARegular");
+                    fonts.AddFont("Font Awesome 7 Brands-Regular-400.otf", "FABrands");
+
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
@@ -52,6 +56,8 @@ namespace FilesSortingSystem
             builder.Services.AddSingleton<ILogMapper, LogMapper>();
             builder.Services.AddSingleton<IGetLogsEntryInteractor, GetLogsEntryInteractor>();
             builder.Services.AddSingleton<IClearLogsInteractor, ClearLogsInteractor>();
+            builder.Services.AddSingleton<IDeleteRuleInteractor, DeleteRuleInteractor>();
+            builder.Services.AddSingleton<IUpdateRuleInteractor, UpdateRuleInteractor>();
 
 
             // Interactors

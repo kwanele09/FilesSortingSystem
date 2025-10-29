@@ -16,8 +16,9 @@
             HorizontalOptions="Center"
             Stroke="#043151"
             StrokeThickness="1"
-            VerticalOptions="Center">
-
+            VerticalOptions="Center"
+            MaximumWidthRequest="1200"
+            MaximumHeightRequest="900">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="20" />
             </Border.StrokeShape>
@@ -30,53 +31,74 @@
                     Offset="2,2" />
             </Border.Shadow>
 
-            <VerticalStackLayout Spacing="15">
+            <Grid RowSpacing="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
                 <Label
+                    Grid.Row="0"
                     FontAttributes="Bold"
                     FontSize="40"
                     HorizontalOptions="Center"
                     Text="Sorting Rules" />
+
                 <Label
+                    Grid.Row="1"
                     FontSize="25"
                     HorizontalOptions="Center"
                     Text="Specify how files should be sorted into folders." />
 
                 <BoxView
+                    Grid.Row="2"
                     HeightRequest="1"
                     HorizontalOptions="Fill"
                     Color="Gray" />
 
-                <HorizontalStackLayout Spacing="260">
+                <Grid Grid.Row="3" Padding="10,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.5*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
                     <Label
+                        Grid.Column="0"
+                        FontSize="25"
+                        Text="File Extension"
+                        FontAttributes="Bold" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="25"
+                        Text="Destination Folder"
+                        FontAttributes="Bold" />
+                    <Label
+                        Grid.Column="2"
                         FontSize="25"
                         HorizontalOptions="Center"
-                        Text="File Extension" />
-                    <Label
-                        FontSize="25"
-                        HorizontalOptions="End"
-                        Text="Destination Folder" />
-
-                    <Label
-                        FontSize="25"
-                        HorizontalOptions="Center"
-                        Text="Case Sensitive" />
-                </HorizontalStackLayout>
+                        Text="Case Sensitive"
+                        FontAttributes="Bold" />
+                </Grid>
 
                 <Border
+                    Grid.Row="4"
                     x:Name="RulesBorder"
+                    Padding="5"
                     BackgroundColor="#043151"
                     HorizontalOptions="Fill"
                     Stroke="White"
                     StrokeThickness="1"
-                    VerticalOptions="Start">
-
+                    VerticalOptions="Fill">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10" />
                     </Border.StrokeShape>
 
                     <CollectionView
-                        Margin="0,10,0,0"
                         ItemsSource="{Binding Rules}"
                         SelectionMode="None">
                         <CollectionView.ItemTemplate>
@@ -84,31 +106,67 @@
                                 <VerticalStackLayout>
                                     <Grid Padding="5">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="2.5*" />
                                             <ColumnDefinition Width="3*" />
-                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="1*" />
                                         </Grid.ColumnDefinitions>
 
-                                        <Label
+                                        <Entry
                                             Grid.Column="0"
-                                            FontSize="25"
+                                            FontSize="20"
                                             Text="{Binding Extension}"
-                                            TextColor="White"
-                                            VerticalOptions="Center" />
+                                            VerticalOptions="Center"
+                                            IsEnabled="{Binding IsUserDefined}" />
 
-                                        <Label
+                                        <HorizontalStackLayout
                                             Grid.Column="1"
-                                            FontSize="25"
-                                            Text="{Binding Category}"
-                                            TextColor="White"
-                                            VerticalOptions="Center" />
+                                            Spacing="5"
+                                            VerticalOptions="Center">
+                                            <Entry
+                                                HorizontalOptions="FillAndExpand"
+                                                FontSize="20"
+                                                Text="{Binding Category}"
+                                                VerticalOptions="Center"
+                                                IsEnabled="{Binding IsUserDefined}" />
+
+                                            <Button
+    FontFamily="FASolid"
+    Text="&#xf044;"
+    FontSize="22"
+    WidthRequest="40"
+    HeightRequest="40"
+    BackgroundColor="Transparent"
+    TextColor="White"
+    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SortingRulesViewModel}}, Path=UpdateRuleCommand}"
+    CommandParameter="{Binding .}"
+    IsVisible="{Binding IsUserDefined}"
+    CornerRadius="8"
+    Padding="0" />
+
+                                            <Button
+    FontFamily="FASolid"
+    Text="&#xf1f8;"
+    FontSize="22"
+    WidthRequest="40"
+    HeightRequest="40"
+    BackgroundColor="Transparent"
+    TextColor="White"
+    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SortingRulesViewModel}}, Path=DeleteRuleCommand}"
+    CommandParameter="{Binding .}"
+    IsVisible="{Binding IsUserDefined}"
+    CornerRadius="8"
+    Padding="0" />
+
+                                        </HorizontalStackLayout>
 
                                         <CheckBox
                                             Grid.Column="2"
+                                            HorizontalOptions="Center"
                                             IsChecked="{Binding IsCaseSensitive}"
                                             Scale="1.5"
                                             VerticalOptions="Center"
-                                            Color="Purple" />
+                                            Color="Purple"
+                                            IsEnabled="{Binding IsUserDefined}" />
                                     </Grid>
 
                                     <BoxView
@@ -121,45 +179,37 @@
                     </CollectionView>
                 </Border>
 
-                <VerticalStackLayout HorizontalOptions="Start" Spacing="15">
-                    <Border
-                        Padding="0"
-                        BackgroundColor="#043151"
-                        HorizontalOptions="Center"
-                        Stroke="White"
-                        StrokeThickness="2">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="10" />
-                        </Border.StrokeShape>
-                        <Border.Shadow>
-                            <Shadow
-                                Brush="Black"
-                                Opacity="0.2"
-                                Radius="10"
-                                Offset="2,2" />
-                        </Border.Shadow>
-
-                        <Button
-                            BackgroundColor="Transparent"
-                            Command="{Binding AddRuleCommand}"
-                            FontSize="25"
-                            HeightRequest="50"
-                            Text="+ Add Rule"
-                            TextColor="White"
-                            WidthRequest="1090" />
-                    </Border>
-
+                <Border
+                    Grid.Row="5"
+                    Padding="0"
+                    BackgroundColor="#043151"
+                    HorizontalOptions="Fill"
+                    Stroke="White"
+                    StrokeThickness="2">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
                     <Button
-                        Background="#0C95F8"
-                        Command="{Binding DoneCommand}"
+                        BackgroundColor="Transparent"
+                        Command="{Binding AddRuleCommand}"
                         FontSize="25"
                         HeightRequest="50"
-                        HorizontalOptions="Center"
-                        Text="Done"
-                        TextColor="White"
-                        WidthRequest="150" />
-                </VerticalStackLayout>
-            </VerticalStackLayout>
+                        Text="+ Add Rule"
+                        TextColor="White" />
+                </Border>
+
+                <Button
+                    Grid.Row="6"
+                    Background="#0C95F8"
+                    Command="{Binding DoneCommand}"
+                    FontSize="25"
+                    HeightRequest="50"
+                    HorizontalOptions="Center"
+                    Text="Save"
+                    TextColor="White"
+                    WidthRequest="150" />
+
+            </Grid>
         </Border>
     </Grid>
 </ContentPage>

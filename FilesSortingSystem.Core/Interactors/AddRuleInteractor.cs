@@ -22,7 +22,8 @@ namespace FilesSortingSystem.Core.Interactors
             {
                 Category = fileSortRuleInput.Category,
                 Extension = fileSortRuleInput.Extension,
-                IsCaseSensitive = fileSortRuleInput.IsCaseSensitive
+                IsCaseSensitive = fileSortRuleInput.IsCaseSensitive,
+                IsUserDefined = fileSortRuleInput.IsUserDefined
             };
         }
     }

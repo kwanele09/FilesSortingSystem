@@ -11,6 +11,7 @@ namespace FilesSortingSystem.ViewModels
         [ObservableProperty] private string extension = string.Empty;
         [ObservableProperty] private string category = string.Empty;
         [ObservableProperty] private bool isCaseSensitive = true;
+        [ObservableProperty] private bool isUserDefined = true;
 
 
         [RelayCommand]
@@ -37,7 +38,8 @@ namespace FilesSortingSystem.ViewModels
             {
                 Extension = Extension,
                 Category = Category,
-                IsCaseSensitive = IsCaseSensitive
+                IsCaseSensitive = IsCaseSensitive,
+                IsUserDefined = IsUserDefined,
             };
         }
 

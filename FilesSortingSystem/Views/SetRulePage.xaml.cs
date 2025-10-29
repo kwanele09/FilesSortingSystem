@@ -11,12 +11,12 @@ public partial class SetRulePage : ContentPage
 		this.Loaded += (s, e) =>
 		{
 			MainBorder.WidthRequest = this.Width * 0.8;
-			MainBorder.HeightRequest = this.Height * 0.9;
+			MainBorder.HeightRequest = this.Height * 0.5;
 		};
 		this.SizeChanged += (s, e) =>
 		{
 			MainBorder.WidthRequest = this.Width * 0.8;
-			MainBorder.HeightRequest = this.Height * 0.9;
+			MainBorder.HeightRequest = this.Height * 0.5;
 		};
     }
 }

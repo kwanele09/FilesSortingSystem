@@ -15,8 +15,8 @@ using System.Threading.Tasks;
 namespace FilesSortingSystem.ViewModels
 {
     public partial class SortingRulesViewModel(
-        IAddRuleInteractor addRuleInteractor,
         IGetRulesInteractor getRulesInteractor,
+        IDeleteRuleInteractor deleteRuleInteractor,
         INavigate navigate) : ObservableObject
     {
         [ObservableProperty] private ObservableCollection<FileSortRule> rules = new();
@@ -25,6 +25,30 @@ namespace FilesSortingSystem.ViewModels
         private async Task AddRuleAsync()
         {
             await navigate.NavigateTo("addRule");
+        }
+
+        [RelayCommand]
+        private async Task UpdateRuleAsync(FileSortRule rule)
+        {
+            if (rule == null) return;
+
+            await navigate.NavigateTo($"updateRule?id={rule.Id}");
+        }
+
+        [RelayCommand]
+        private async Task DeleteRuleAsync(FileSortRule rule)
+        {
+            if (rule == null || rule.Id == 0) return; 
+
+            try
+            {
+                await deleteRuleInteractor.Handle(rule.Id); 
+                Rules.Remove(rule);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SortingRulesViewModel] Error deleting rule: {ex}");
+            }
         }
 
         [RelayCommand]
@@ -55,8 +79,8 @@ namespace FilesSortingSystem.ViewModels
 
                 var userRules = await getRulesInteractor.Handle() ?? new List<FileSortRule>();
 
-                var combinedRules = defaultRules
-                    .Concat(userRules)
+                var combinedRules = userRules
+                    .Concat(defaultRules)
                     .GroupBy(r => (r.Extension.ToLowerInvariant(), r.Category.ToLowerInvariant()))
                     .Select(g => g.First())
                     .ToList();
