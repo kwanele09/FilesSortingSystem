@@ -12,7 +12,7 @@ namespace FilesSortingSystem
             Routing.RegisterRoute("addRule", typeof(SetRulePage));
             Routing.RegisterRoute("rules", typeof(SortingRulesPage));
             Routing.RegisterRoute("help", typeof(HelpPage));
-            Routing.RegisterRoute("about", typeof(AboutMe));
+            Routing.RegisterRoute("updateRule", typeof(UpdateRulePage));
         }
     }
 }

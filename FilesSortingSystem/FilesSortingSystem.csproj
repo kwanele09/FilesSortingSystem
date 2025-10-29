@@ -71,9 +71,6 @@
     <ProjectReference Include="..\FilesSortingSystem.Storage\FilesSortingSystem.Storage.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <MauiXaml Update="Views\AboutMe.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
     <MauiXaml Update="Views\HelpPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
@@ -90,6 +87,9 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\SortingRulesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\UpdateRulePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
   </ItemGroup>

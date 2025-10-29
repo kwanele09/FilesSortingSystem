@@ -17,6 +17,7 @@ namespace FilesSortingSystem.Storage.Mappers
                     Extension = entity.Extension,
                     Category = entity.Category,
                     IsCaseSensitive = entity.IsCaseSensitive,
+                    IsUserDefined = entity.IsUserDefined,
                 };
         }
 
@@ -30,7 +31,8 @@ namespace FilesSortingSystem.Storage.Mappers
                     Id = domain.Id,
                     Extension = domain.Extension,
                     Category = domain.Category,
-                    IsCaseSensitive = domain.IsCaseSensitive
+                    IsCaseSensitive = domain.IsCaseSensitive,
+                    IsUserDefined = domain.IsUserDefined,
                 };
         }
     }

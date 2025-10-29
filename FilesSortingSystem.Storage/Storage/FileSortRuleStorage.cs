@@ -44,11 +44,11 @@ namespace FilesSortingSystem.Storage.Storage
                 if (existingRule != null)
                 {
                     await conn.DeleteAsync(existingRule);
-                    Console.WriteLine($"Rule with ID {ruleId} deleted successfully.");
+                    Debug.WriteLine($"Rule with ID {ruleId} deleted successfully.");
                 }
                 else
                 {
-                    Console.WriteLine($"Rule with ID {ruleId} not found.");
+                    Debug.WriteLine($"Rule with ID {ruleId} not found.");
                 }
             }
             catch (Exception ex)
