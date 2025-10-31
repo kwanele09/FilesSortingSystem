@@ -14,11 +14,11 @@
             Padding="20"
             BackgroundColor="#043151"
             HorizontalOptions="Center"
+            MaximumHeightRequest="900"
+            MaximumWidthRequest="1200"
             Stroke="#043151"
             StrokeThickness="1"
-            VerticalOptions="Center"
-            MaximumWidthRequest="1200"
-            MaximumHeightRequest="900">
+            VerticalOptions="Center">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="20" />
             </Border.StrokeShape>
@@ -69,25 +69,25 @@
                     </Grid.ColumnDefinitions>
                     <Label
                         Grid.Column="0"
+                        FontAttributes="Bold"
                         FontSize="25"
-                        Text="File Extension"
-                        FontAttributes="Bold" />
+                        Text="File Extension" />
                     <Label
                         Grid.Column="1"
+                        FontAttributes="Bold"
                         FontSize="25"
-                        Text="Destination Folder"
-                        FontAttributes="Bold" />
+                        Text="Destination Folder" />
                     <Label
                         Grid.Column="2"
+                        FontAttributes="Bold"
                         FontSize="25"
                         HorizontalOptions="Center"
-                        Text="Case Sensitive"
-                        FontAttributes="Bold" />
+                        Text="Case Sensitive" />
                 </Grid>
 
                 <Border
-                    Grid.Row="4"
                     x:Name="RulesBorder"
+                    Grid.Row="4"
                     Padding="5"
                     BackgroundColor="#043151"
                     HorizontalOptions="Fill"
@@ -98,9 +98,7 @@
                         <RoundRectangle CornerRadius="10" />
                     </Border.StrokeShape>
 
-                    <CollectionView
-                        ItemsSource="{Binding Rules}"
-                        SelectionMode="None">
+                    <CollectionView ItemsSource="{Binding Rules}" SelectionMode="None">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="domainEntities:FileSortRule">
                                 <VerticalStackLayout>
@@ -114,48 +112,48 @@
                                         <Entry
                                             Grid.Column="0"
                                             FontSize="20"
+                                            IsEnabled="{Binding IsUserDefined}"
                                             Text="{Binding Extension}"
-                                            VerticalOptions="Center"
-                                            IsEnabled="{Binding IsUserDefined}" />
+                                            VerticalOptions="Center" />
 
                                         <HorizontalStackLayout
                                             Grid.Column="1"
                                             Spacing="5"
                                             VerticalOptions="Center">
                                             <Entry
-                                                HorizontalOptions="FillAndExpand"
                                                 FontSize="20"
+                                                HorizontalOptions="FillAndExpand"
+                                                IsEnabled="{Binding IsUserDefined}"
                                                 Text="{Binding Category}"
-                                                VerticalOptions="Center"
-                                                IsEnabled="{Binding IsUserDefined}" />
+                                                VerticalOptions="Center" />
 
                                             <Button
-    FontFamily="FASolid"
-    Text="&#xf044;"
-    FontSize="22"
-    WidthRequest="40"
-    HeightRequest="40"
-    BackgroundColor="Transparent"
-    TextColor="White"
-    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SortingRulesViewModel}}, Path=UpdateRuleCommand}"
-    CommandParameter="{Binding .}"
-    IsVisible="{Binding IsUserDefined}"
-    CornerRadius="8"
-    Padding="0" />
+                                                Padding="0"
+                                                BackgroundColor="Transparent"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SortingRulesViewModel}}, Path=UpdateRuleCommand}"
+                                                CommandParameter="{Binding .}"
+                                                CornerRadius="8"
+                                                FontFamily="FASolid"
+                                                FontSize="22"
+                                                HeightRequest="40"
+                                                IsVisible="{Binding IsUserDefined}"
+                                                Text="&#xf044;"
+                                                TextColor="White"
+                                                WidthRequest="40" />
 
                                             <Button
-    FontFamily="FASolid"
-    Text="&#xf1f8;"
-    FontSize="22"
-    WidthRequest="40"
-    HeightRequest="40"
-    BackgroundColor="Transparent"
-    TextColor="White"
-    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SortingRulesViewModel}}, Path=DeleteRuleCommand}"
-    CommandParameter="{Binding .}"
-    IsVisible="{Binding IsUserDefined}"
-    CornerRadius="8"
-    Padding="0" />
+                                                Padding="0"
+                                                BackgroundColor="Transparent"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SortingRulesViewModel}}, Path=DeleteRuleCommand}"
+                                                CommandParameter="{Binding .}"
+                                                CornerRadius="8"
+                                                FontFamily="FASolid"
+                                                FontSize="22"
+                                                HeightRequest="40"
+                                                IsVisible="{Binding IsUserDefined}"
+                                                Text="&#xf1f8;"
+                                                TextColor="White"
+                                                WidthRequest="40" />
 
                                         </HorizontalStackLayout>
 
@@ -163,10 +161,10 @@
                                             Grid.Column="2"
                                             HorizontalOptions="Center"
                                             IsChecked="{Binding IsCaseSensitive}"
+                                            IsEnabled="{Binding IsUserDefined}"
                                             Scale="1.5"
                                             VerticalOptions="Center"
-                                            Color="Purple"
-                                            IsEnabled="{Binding IsUserDefined}" />
+                                            Color="Purple" />
                                     </Grid>
 
                                     <BoxView
